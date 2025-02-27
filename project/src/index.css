@@ -11,3 +11,24 @@
   justify-content: center;
   margin-top: 0.5rem;
 }
+
+/* Custom colors for the ideal table */
+.text-mint-green {
+  color: #8cd3c5;
+}
+
+.bg-beige-light {
+  background-color: #f9f5eb;
+}
+
+.bg-beige {
+  background-color: #e8dcc9;
+}
+
+.text-beige-dark {
+  color: #b3a38b;
+}
+
+.border-beige {
+  border-color: #e8dcc9;
+}

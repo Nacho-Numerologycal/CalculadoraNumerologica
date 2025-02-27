@@ -225,6 +225,40 @@ function subtractWithRules(a: number, b: number): number {
   return Math.abs(a - b);
 }
 
+// Mapping for ideal numbers based on position
+const idealNumberMapping: Record<string, number> = {
+  masculine: 1,
+  feminine: 2,
+  challenge: 3,
+  work: 4,
+  energetic: 5,
+  emotional: 6,
+  mental: 7,
+  talent: 8,
+  personal: 9
+};
+
+// Function to calculate excess and missing values
+function calculateExcessAndMissing(ideal: number, real: number): { excess: number, missing: number } {
+  if (ideal === real) {
+    return { excess: 0, missing: 0 };
+  }
+  
+  if (real > ideal) {
+    // Calculate excess
+    const excess = real - ideal;
+    // Calculate missing based on excess
+    const missing = 9 - excess;
+    return { excess, missing };
+  } else {
+    // Calculate missing
+    const missing = ideal - real;
+    // Calculate excess based on missing
+    const excess = 9 - missing;
+    return { excess, missing };
+  }
+}
+
 const Modal = ({ number, onClose }: { number: number; onClose: () => void }) => {
   const info = numerologyInfo[number];
   if (!info) return null;
@@ -309,6 +343,18 @@ function App() {
     lifePath: null,
     purpose: null,
   });
+  
+  const [idealTable, setIdealTable] = useState<{
+    ideal: number[];
+    real: (number | null)[];
+    excess: (number | null)[];
+    missing: (number | null)[];
+  }>({
+    ideal: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    real: Array(9).fill(null),
+    excess: Array(9).fill(null),
+    missing: Array(9).fill(null)
+  });
 
   const calculateNumerology = (date: string) => {
     const [year, month, day] = date.split('-').map(Number);
@@ -325,7 +371,8 @@ function App() {
     const lifePath = reduceNumber(day + month + year);
     const purpose = reduceNumber(personal + lifePath);
 
-    setResults({
+    // Update results
+    const newResults = {
       personal,
       feminine,
       masculine,
@@ -337,6 +384,35 @@ function App() {
       challenge,
       lifePath,
       purpose,
+    };
+    
+    setResults(newResults);
+    
+    // Update ideal table
+    const realValues = Array(9).fill(null);
+    const excessValues = Array(9).fill(null);
+    const missingValues = Array(9).fill(null);
+    
+    // Map results to their positions in the ideal table
+    Object.entries(idealNumberMapping).forEach(([key, value]) => {
+      if (key in newResults && newResults[key as keyof typeof newResults] !== null) {
+        const position = value - 1; // Adjust for 0-based index
+        realValues[position] = newResults[key as keyof typeof newResults];
+        
+        // Calculate excess and missing
+        const ideal = position + 1; // Ideal number (1-9)
+        const real = realValues[position] as number;
+        const { excess, missing } = calculateExcessAndMissing(ideal, real);
+        excessValues[position] = excess;
+        missingValues[position] = missing;
+      }
+    });
+    
+    setIdealTable({
+      ideal: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      real: realValues,
+      excess: excessValues,
+      missing: missingValues,
     });
   };
 
@@ -362,7 +438,7 @@ function App() {
   }) => {
     const shapeClasses = {
       circle: 'rounded-full',
-      diamond: 'rotate-45 transform',
+      diamond: 'rotate-45 transform aspect-square',
       triangle: 'clip-path-triangle'
     };
 
@@ -380,15 +456,78 @@ function App() {
     return (
       <div className={`flex flex-col items-center ${className}`}>
         <div 
-          className={`w-16 h-16 flex items-center justify-center border-2 ${colorClasses[color]} ${shapeClasses[shape]} cursor-pointer transition-colors duration-200`}
+          className={`w-16 h-16 md:w-16 md:h-16 flex items-center justify-center border-2 ${colorClasses[color]} ${shapeClasses[shape]} cursor-pointer transition-colors duration-200`}
           onClick={() => number !== null && setSelectedNumber(number)}
         >
-          <span className={`text-2xl font-bold ${shape === 'diamond' ? '-rotate-45' : ''}`}>
+          <span className={`text-xl md:text-2xl font-bold ${shape === 'diamond' ? '-rotate-45' : ''}`}>
             {number ?? '-'}
           </span>
         </div>
-        <div className="text-xs font-medium text-gray-600 mt-2 text-center">
+        <div className="text-xs md:text-sm font-medium text-gray-600 mt-2 text-center">
           {label}
+        </div>
+      </div>
+    );
+  };
+
+  const IdealTable = () => {
+    return (
+      <div className="mt-16 bg-white p-8 rounded-lg shadow-md">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Tabla Ideal Numérica</h2>
+        <div className="border-2 border-beige rounded-lg p-6 bg-beige-light">
+          {/* Grid Container */}
+          <div className="grid grid-cols-4 md:grid-cols-10 gap-2 md:gap-4">
+            {/* Row Labels */}
+            <div className="space-y-4 md:space-y-6 pr-4 md:pr-8 border-r-2 border-beige flex flex-col justify-center">
+              <div className="font-medium text-beige-dark text-lg md:text-2xl h-12 md:h-16 flex items-center">Ideal:</div>
+              <div className="font-medium text-mint-green text-lg md:text-2xl h-12 md:h-16 flex items-center">Exceso:</div>
+              <div className="font-medium text-beige-dark text-lg md:text-2xl h-12 md:h-16 flex items-center">Real:</div>
+              <div className="font-medium text-mint-green text-lg md:text-2xl h-12 md:h-16 flex items-center">Falta:</div>
+            </div>
+            
+            {/* Numbers Grid */}
+            <div className="col-span-3 md:col-span-9 grid grid-cols-9 gap-2 md:gap-4">
+              {/* Ideal Numbers Row */}
+              <div className="col-span-9 grid grid-cols-9 gap-2 md:gap-4 mb-2 md:mb-4">
+                {idealTable.ideal.map((num, i) => (
+                  <div key={`ideal-${i}`} className="w-8 h-8 md:w-16 md:h-16 rounded-full bg-beige flex items-center justify-center text-beige-dark font-medium text-base md:text-2xl">
+                    {num}
+                  </div>
+                ))}
+              </div>
+              
+              {/* Excess Numbers Row */}
+              <div className="col-span-9 grid grid-cols-9 gap-2 md:gap-4 mb-2 md:mb-4">
+                {idealTable.excess.map((num, i) => (
+                  <div key={`excess-${i}`} className="w-8 h-8 md:w-16 md:h-16 flex items-center justify-center text-mint-green font-medium text-base md:text-2xl">
+                    {num !== null ? num : '-'}
+                  </div>
+                ))}
+              </div>
+              
+              {/* Real Numbers Row */}
+              <div className="col-span-9 grid grid-cols-9 gap-2 md:gap-4 mb-2 md:mb-4">
+                {idealTable.real.map((num, i) => (
+                  <div 
+                    key={`real-${i}`} 
+                    className="w-8 h-8 md:w-16 md:h-16 flex items-center justify-center text-beige-dark font-medium text-base md:text-2xl cursor-pointer hover:text-indigo-600"
+                    onClick={() => num !== null && setSelectedNumber(num)}
+                  >
+                    {num !== null ? num : '-'}
+                  </div>
+                ))}
+              </div>
+              
+              {/* Missing Numbers Row */}
+              <div className="col-span-9 grid grid-cols-9 gap-2 md:gap-4">
+                {idealTable.missing.map((num, i) => (
+                  <div key={`missing-${i}`} className="w-8 h-8 md:w-16 md:h-16 flex items-center justify-center text-mint-green font-medium text-base md:text-2xl">
+                    {num !== null ? num : '-'}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -417,84 +556,93 @@ function App() {
         </div>
 
         {birthDate && (
-          <div className="flex flex-col items-center gap-20">
-            {/* Top Level */}
-            <div className="flex justify-between w-full max-w-2xl">
-              <NumberBox 
-                number={results.purpose} 
-                label="Nº DE PROPÓSITO" 
-                shape="triangle"
-                color="red"
-              />
-              <NumberBox 
-                number={results.talent} 
-                label="Nº TALENTO" 
-                color="green"
-              />
-              <NumberBox 
-                number={results.lifePath} 
-                label="Nº CAMINO DE VIDA" 
-                shape="diamond"
-                color="orange"
-              />
+          <>
+            <div className="flex flex-col items-center gap-20">
+              {/* Top Level */}
+              <div className="flex justify-center gap-16 md:justify-between w-full max-w-2xl">
+                <NumberBox 
+                  number={results.purpose} 
+                  label="Nº DE PROPÓSITO" 
+                  shape="triangle"
+                  color="red"
+                />
+                <NumberBox 
+                  number={results.lifePath} 
+                  label="Nº CAMINO DE VIDA" 
+                  shape="diamond"
+                  color="orange"
+                />
+              </div>
+              
+              {/* Talent Level (Mobile) */}
+              <div className="flex justify-center">
+                <NumberBox 
+                  number={results.talent} 
+                  label="Nº TALENTO" 
+                  color="green"
+                />
+              </div>
+              
+              {/* Mental & Emotional Level */}
+              <div className="flex justify-center gap-16 md:gap-32">
+                <NumberBox 
+                  number={results.emotional} 
+                  label="Nº EMOCIONAL" 
+                  color="purple"
+                />
+                <NumberBox 
+                  number={results.mental} 
+                  label="Nº MENTAL" 
+                  color="blue"
+                />
+              </div>
+              
+              {/* Base Numbers */}
+              <div className="flex justify-center gap-8 md:gap-16 md:justify-between w-full max-w-2xl">
+                <NumberBox 
+                  number={results.feminine} 
+                  label="Nº ENERGÍA FEMENINA" 
+                  color="indigo"
+                />
+                <NumberBox 
+                  number={results.personal} 
+                  label="Nº PERSONAL" 
+                  color="indigo"
+                />
+                <NumberBox 
+                  number={results.masculine} 
+                  label="Nº ENERGÍA MASCULINA" 
+                  color="indigo"
+                />
+              </div>
+              
+              {/* Work & Energetic */}
+              <div className="flex justify-center gap-16 md:gap-32">
+                <NumberBox 
+                  number={results.work} 
+                  label="Nº TRABAJO" 
+                  color="teal"
+                />
+                <NumberBox 
+                  number={results.energetic} 
+                  label="Nº ENERGÉTICO" 
+                  color="pink"
+                />
+              </div>
+              
+              {/* Challenge */}
+              <div>
+                <NumberBox 
+                  number={results.challenge} 
+                  label="Nº RETO" 
+                  color="purple"
+                />
+              </div>
             </div>
-            
-            {/* Mental & Emotional Level */}
-            <div className="flex justify-center gap-32">
-              <NumberBox 
-                number={results.emotional} 
-                label="Nº EMOCIONAL" 
-                color="purple"
-              />
-              <NumberBox 
-                number={results.mental} 
-                label="Nº MENTAL" 
-                color="blue"
-              />
-            </div>
-            
-            {/* Base Numbers */}
-            <div className="flex justify-between w-full max-w-2xl">
-              <NumberBox 
-                number={results.feminine} 
-                label="Nº ENERGÍA FEMENINA" 
-                color="indigo"
-              />
-              <NumberBox 
-                number={results.personal} 
-                label="Nº PERSONAL" 
-                color="indigo"
-              />
-              <NumberBox 
-                number={results.masculine} 
-                label="Nº ENERGÍA MASCULINA" 
-                color="indigo"
-              />
-            </div>
-            
-            {/* Work & Energetic */}
-            <div className="flex justify-center gap-32">
-              <NumberBox 
-                number={results.work} 
-                label="Nº TRABAJO" 
-                color="teal"
-              />
-              <NumberBox 
-                number={results.energetic} 
-                label="Nº ENERGÉTICO" 
-                color="pink"
-              />
-            </div>
-            
-            {/* Challenge */}
-            <div>
-              <NumberBox 
-                number={results.challenge} 
-                label="Nº RETO" 
-                color="purple"
-              />
-            </div>
-          </div>
+
+            {/* Ideal Table */}
+            <IdealTable />
+          </>
         )}
 
         {selectedNumber !== null && (
@@ -508,4 +656,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
