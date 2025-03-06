@@ -26,8 +26,8 @@ export const numerologyInfo = {
   // -------------------------------------------------------
   0: {
     // TODO: Pega aquí cada campo de texto específico del número 0
-    centro: "Todas las posibilidades, la conexión directa con la energía de la posición en la que se encuentra, Potencial ilimitado, Inicio de ciclo de vida, Eternidad, Manifestación del universo creador, Punto de partida, Voluntad, Inconsciente colectivo, Conexión con todo. Todas las oportunidades, la vida viviéndose a sí misma a través de mi experiencia.",
-    reto: "El vacío, la nada, la falta, necesidad, abandono, abuso, desmerecimiento, sin valor propio, sin identidad, sin sentido, sin propósito, Lo que se esconde, lo que no se quiere ver, lo que no reconozco en mí, espejos del yo. Inabarcable.",
+    centro: "Todas las posibilidades, la conexión directa con la energía de la posición en la que se encuentra, Potencial ilimitado, Inicio de ciclo de vida, Eternidad, Manifestación del universo creador, Punto de partida, Voluntad, Inconsciente colectivo, Conexión con todo. Todas las oportunidades, la vida viviéndose a sí misma a través de mi experiencia.  ",
+    reto: "El vacío, la nada, la falta, necesidad, abandono, abuso, desmerecimiento, sin valor propio, sin identidad, sin sentido, sin propósito, Lo que se esconde, lo que no se quiere ver, lo que no reconozco en mí, espejos del yo. Inabarcable.  ",
     arquetipo: "La misma esencia del arquetipo. O su voluntad.",
     energia: "Todas las energías, ninguna energía.",
     aprendizaje: "Aprender a manifestar quien es, a encontrar en su interior otras posibilidades, a adaptarse a lo que pasa, a materializarse o a desaparecer, a conectarse con la fuente, a vivirse desde el arquetipo mismo, a no ser abusado por no saber quien es ni lo que quiere, a aceptar el vacío y el abismo inconmensurable.",
@@ -111,8 +111,8 @@ export const numerologyInfo = {
     emocionalRelaciones: "Busca relaciones estables y seguras. Puede mostrar afecto a través de acciones concretas y confiables más que mediante expresiones emocionales efusivas. Valora la lealtad y la consistencia en sus vínculos. Sin embargo, pueden ser inflexibles y les cuesta expresar sus sentimientos, lo que podría llevar a que su pareja se sienta poco atendida.",  
     trabajo: "Destaca en roles que requieren organización, precisión y responsabilidad. Profesiones como ingeniería, arquitectura, contabilidad, administración y gestión de proyectos son adecuadas. Son prácticos, metódicos y responsables, orientados hacia el logro de metas tangibles y el establecimiento de estructuras sólidas en sus vidas.",  
     familia: "Asume el rol de proveedor y protector, buscando crear un entorno seguro y estructurado para sus seres queridos.",  
-    territorio: "Valora la propiedad y el mantenimiento de espacios físicos que representen seguridad y estabilidad.",  
-    energetico: "Energía constante y sostenida, enfocada en la realización de tareas y proyectos a largo plazo.",  
+    territorio: "Valora propiedades y activos tangibles, viendo en ellos una manifestación de seguridad y estabilidad.",  
+    energetico: "Posee una energía intensa y enfocada, con una fuerte motivación para alcanzar metas y superar desafíos.",  
     creativo: "Creatividad aplicada de manera práctica, como en la construcción, el diseño estructural o la mejora de sistemas existentes.",  
     sexual: "Enfoque tradicional y constante, valorando la estabilidad y la confianza en la intimidad.",  
     conclusion: "El 4 es la raíz que sostiene el árbol de nuestra vida, la base firme desde la cual podemos expandirnos sin perder el equilibrio."  
@@ -174,7 +174,7 @@ export const numerologyInfo = {
     territorio: "Prefiere entornos tranquilos y contemplativos que fomenten la reflexión y el crecimiento espiritual.",  
     energetico: "Energía enfocada en la introspección y el crecimiento espiritual, con una tendencia hacia la meditación y la contemplación.",  
     creativo: "Creatividad manifestada en formas que exploran lo desconocido, como la escritura, la filosofía y las artes místicas.",  
-    sexual: "Enfoque reservado y profundo, buscando conexiones que trasciendan lo físico y se alineen con una unión espiritual y emocional.",  
+    sexual: "Enfoque reservado y profundo, buscando conexiones que trasciendan lo físico y se alineen con una unión espiritual y emocional; valora la intimidad como una expresión sagrada del amor universal.",  
     conclusion: "El 7 es el puente entre la razón y la espiritualidad, guiando la búsqueda de conocimiento y la expansión de la conciencia."  
   },  
   8: {  
@@ -216,7 +216,98 @@ export const numerologyInfo = {
     creativo: "Creatividad orientada hacia la expresión artística que inspire y eleve la conciencia; talento en disciplinas como la música, la poesía, la pintura y la escritura.",  
     sexual: "Enfoque trascendental y profundo, buscando una unión que trascienda lo físico y conecte en niveles espirituales y emocionales; valora la intimidad como una expresión sagrada del amor universal.",  
     conclusion: "El 9 representa la sabiduría universal y la culminación de ciclos, invitándonos a soltar lo que ya no sirve y a servir a la humanidad con compasión."  
-  }  
+  },
+    // -------------------------------------------------------
+  // Número 11
+  // -------------------------------------------------------
+  11: {
+    centro: "Intuición, inspiración, visión espiritual. Representa la evolución más elevada del 1 y el 2. Persona sumamente intuitiva, con gran liderazgo y dotes de mando, capaz de aconsejar y guiar. Es un puente entre lo divino y lo humano, con la palabra como principal herramienta de transformación. Sociable pero reservada, pragmática pero elevada, logra sacar la mejor versión de cada uno y transmutar emociones negativas en positivas.",
+    reto: "Si no canaliza su intensa energía ni la equilibra, puede acumular tensión nerviosa y estrés. Tiende a ser poco práctico o excesivamente soñador. Riesgo de caer en un ego espiritual desmesurado, desconectándose de la realidad y creyéndose por encima del bien y del mal. Puede manipular con la palabra y caer en la vanidad, la victimización, la celopatía y la dependencia. Debe aprender a manejar su vulnerabilidad emocional y evitar la impaciencia.",
+    arquetipo: "El Maestro de la Palabra, el consejero, el guía espiritual, el visionario inspirador que integra grupos antagónicos y lidera con su don comunicativo.",
+    energia: "Elevada, vanguardista, colaboradora; combina la fuerza individual del 1 con la sensibilidad y entrega del 2 para servir a un propósito superior.",
+    aprendizaje: "Aprender a vivir en coherencia con su gran intuición, manteniéndose conectado con la realidad cotidiana. Canalizar su liderazgo y don de la palabra para servir a los demás sin caer en manipulación o vanidad. Equilibrar la vida espiritual con la práctica diaria.",
+    talentos: "Poder de convicción, inspiración, liderazgo, dotes de mando, carisma social, mente abierta y conciliadora, capacidad para transmutar emociones con la palabra.",
+    caminoDeVida: "Servir a la sociedad como puente espiritual, guiando y motivando a otros. Compartir su experiencia y sabiduría de forma práctica y elevada, promoviendo la colaboración y el bien común.",
+    proposito: "Ser un faro de luz y un canal de mensajes espirituales que ayuden a la humanidad. Elevar la consciencia colectiva a través de la palabra y el ejemplo.",
+    mental: "Mente visionaria, abierta, capaz de integrar y conciliar posturas opuestas. Riesgo de desconexión con la realidad si se deja llevar por su propio ‘cuento’ sin aterrizar las ideas.",
+    emocionalRelaciones: "Sociable pero con límites claros. Puede mostrarse celoso o victimizarse en la pareja. Necesita aprender a manejar la sensibilidad y la vulnerabilidad para no depender afectivamente.",
+    trabajo: "Maestro, psicólogo, terapeuta, guía espiritual, profesor, diplomático, mentor. Cualquier rol donde pueda aconsejar, inspirar y acompañar.",
+    familia: "Suele traer armonía y visión elevada. Puede actuar como mediador y referente. Debe cuidar no imponerse con un supuesto ‘saber superior’ o invalidar la cotidianeidad de los demás.",
+    territorio: "",
+    energetico: "De gran intensidad; si no lo gestiona, deriva en estrés y tensión nerviosa. Cuando fluye, es capaz de mover grupos y elevar su vibración.",
+    creativo: "Especial talento para la comunicación y la transmutación emocional. Maneja silencios y palabras con gran destreza para transformar realidades.",
+    sexual: "Puede derivar en celos o dependencia si no hay un enfoque maduro de su intensa energía emocional. Requiere sinceridad y autenticidad para no caer en manipulaciones.",
+    conclusion: "El 11 simboliza al maestro que guía desde la palabra y la intuición. Es la conexión viva entre lo divino y lo terrenal, capaz de inspirar y elevar, siempre que mantenga la humildad y la coherencia en su vida cotidiana."
+  },
+
+  // -------------------------------------------------------
+  // Número 22
+  // -------------------------------------------------------
+  22: {
+    centro: "El Maestro Constructor. Evolución elevada del 2 y del 4, combina la entrega y vocación de servicio con la capacidad práctica de materializar grandes proyectos para el beneficio colectivo. Se apoya en su fuerte intuición y su arraigado sentido práctico, gestionando recursos con maestría y naturalidad.",
+    reto: "Puede obcecarse demasiado en la tarea y perder de vista si realmente aporta al bien común. Riesgo de avaricia y acumulación de bienes bajo la excusa de servir a los demás. La seguridad material y la desconfianza se convierten en su ‘criptonita’ espiritual. Puede caer en un complejo de inferioridad o en el síndrome del impostor. Debe vigilar la historia que se cuenta a sí mismo y aprender a no victimizarse cuando algo no sale como esperaba.",
+    arquetipo: "El gran organizador y gestor, el referente nato. El estratega que revoluciona situaciones consideradas imposibles, el agente de cambio pragmático.",
+    energia: "Fuerte, estable, visionaria y solidaria. Despierta confianza y armonía con su sola presencia. Capaz de arraigar lo espiritual a la tierra de manera práctica.",
+    aprendizaje: "Equilibrar su enorme vocación de servicio y construcción con la capacidad de fluir sin forzar. Aprender a desapegarse de personas, creencias y bienes materiales. Mantenerse humilde y coherente en su rol de maestro, sin caer en el ego espiritual o en el autoengaño.",
+    talentos: "Planificación y gestión a gran escala, asombrosa memoria y cálculo mental, liderazgo servicial, organización estratégica, capacidad de armonizar y equilibrar energía en su entorno.",
+    caminoDeVida: "Materializar proyectos transformadores y estables que beneficien a la humanidad. Ser un referente de servicio útil y pragmático, con la mente abierta para encontrar soluciones eficaces ante cada reto.",
+    proposito: "Construir un mundo mejor que el que encontró. Manifestar ideas y estructuras revolucionarias que mejoren la vida de todos, sin buscar protagonismo personal.",
+    mental: "Flexible, adaptativa, busca siempre la solución más coherente. Gran claridad estratégica y memoria certera. Cuando flaquea, aparece la desconfianza y la autoexigencia extrema.",
+    emocionalRelaciones: "Empático, cercano, escucha activa y genuina. Puede sentir miedo a no tener suficientes recursos, volviéndose inseguro o desconfiado. Requiere poner límites para no vaciar su propia energía.",
+    trabajo: "Destaca en organización, administración, dirección de proyectos de gran envergadura. Aplica su entrega y pragmatismo a roles de gestión, construcción, diseño y liderazgo.",
+    familia: "Se convierte en pilar de confianza, sostén y seguridad. Puede volcarse tanto en la ‘gran obra’ que olvide su propio cuidado y el de la familia, si no vigila su equilibrio.",
+    territorio: "",
+    energetico: "Manantial abundante de dar; su sola presencia puede armonizar y estabilizar espacios. Siempre dispuesto a generar recursos y soluciones.",
+    creativo: "Integra la dimensión espiritual y el servicio en cada proyecto práctico. Su creatividad se basa en encontrar estrategias y estructuras nuevas allá donde parecen imposibles.",
+    sexual: "Necesita confianza y equilibrio emocional para entregarse. Puede someterse a estrés si siente que la estabilidad material peligra, afectando su intimidad.",
+    conclusion: "El 22 simboliza la habilidad de construir, de forma pragmática, aquello que eleve la vibración colectiva. Es el maestro que entrega su energía y recursos al servicio de una humanidad más armónica y evolucionada."
+  },
+
+  // -------------------------------------------------------
+  // Número 33
+  // -------------------------------------------------------
+  33: {
+    centro: "El Maestro del Sacrificio Universal. Evolución espiritual del 3 y el 6, representa la vibración amorosa más elevada, más allá del simple enamoramiento. Se consagra al amor incondicional y al servicio desinteresado, irradiando alegría y energía positiva allá donde va. Une lo material y lo espiritual a través del arte, la expresión y la creatividad.",
+    reto: "Puede caer en dependencia emocional y adicciones, dramatizando y victimizándose ante conflictos propios. Se sacrifica incluso cuando la causa no lo merece. Alta sensibilidad que deriva en trastornos conductuales si no se cuida. Debe aprender desapego material y armonía emocional para evitar abusos de terceros. Riesgo de gran ego espiritual y de generar personajes de ‘gurú carismático’ alejados de la autenticidad.",
+    arquetipo: "El maestro del amor incondicional, el gran sanador que anima y levanta al que sufre, el artista iluminado que transforma la densidad en luz.",
+    energia: "Positiva, inagotable, compasiva. Capaz de cambiar el curso de situaciones difíciles con su sola presencia. Sensible y empática, propensa a captar o somatizar lo ajeno.",
+    aprendizaje: "Descubrir el verdadero sentido del sacrificio bien entendido y no perderse en entregas que no suman. Alinear su alta vibración a proyectos y causas que generen un cambio genuino. Aprender a ser asertivo y a equilibrar la sensibilidad para no volverse dependiente o ser manipulado.",
+    talentos: "Gran capacidad de amar y de inspirar a amar. Puede animar y motivar a cualquiera, transmutando la energía densa en liviana. Don para el arte, la expresión, la mediación y la sanación emocional.",
+    caminoDeVida: "Servir y ayudar, pero sobre todo inspirar a otros a hacer lo mismo. Ser un faro de amor universal que transforme de forma real y trascendente. Expandir la solidaridad a nivel colectivo.",
+    proposito: "Elevar la vibración del entorno por medio del amor incondicional y la entrega genuina. Unir lo material y lo espiritual a través de la expresión y la alegría.",
+    mental: "Creativa, imaginativa, muy sensible a influencias externas. Si se bloquea, puede confundir fantasía con realidad y perder su propósito elevado.",
+    emocionalRelaciones: "Muy empático y entregado al otro. Tiende a dramatizar si se siente rechazado o poco valorado. Puede ser manipulador emocional si se tuerce su energía. Necesita equilibrio para no ‘ahogarse’ en la intensidad.",
+    trabajo: "Cualquier ámbito donde pueda transmitir su energía sanadora y creativa: artes, terapia, educación, motivación grupal. Su presencia impulsa positivamente a los demás.",
+    familia: "Le gusta nutrir, alegrar y unir; sin embargo, puede absorber el dolor de su círculo y sufrirlo en carne propia. Ha de aprender límites claros para no agotar su energía.",
+    territorio: "",
+    energetico: "Enorme potencia amorosa y transformadora. Puede cambiar por completo la atmósfera de un lugar con su sola llegada. Cuando se desequilibra, se sumerge en el drama y la victimización.",
+    creativo: "La creación artística y la expresión personal son vías principales para canalizar su alta vibración y su mensaje de amor universal.",
+    sexual: "Intenso y emotivo, busca la fusión amorosa profunda. Riesgo de dependencia, celos o confusiones si su sensibilidad no está bien gestionada.",
+    conclusion: "El 33 representa la mayor expresión de amor incondicional y servicio. Es el maestro que, con su alegría, compasión y creatividad, nos recuerda que el sacrificio genuino puede transformar el mundo."
+  },
+
+  // -------------------------------------------------------
+  // Número 44
+  // -------------------------------------------------------
+  44: {
+    centro: "El Maestro Manifestador. Evolución elevada del 4 y el 8. Conecta la prosperidad y la administración de recursos con una visión profunda y global para cambiar el mundo. Representa fuerza, carisma y autoridad consciente, un liderazgo que no desea imponerse, sino lograr que todo fluya para alcanzar objetivos transformadores.",
+    reto: "Puede volverse demasiado ambicioso y materialista, manipulando el entorno a su favor. Buscan fama y prestigio, escalando posiciones a cualquier precio. La rigidez y el afán de control pueden limitar su potencial. Exceso de trabajo sin enfoque espiritual, que deriva en problemas físicos o pérdidas repentinas. Deben trabajar la avaricia y la desconfianza, evitando forzar las situaciones para su propio beneficio.",
+    arquetipo: "El gran visionario y estratega, el líder carismático, el constructor de realidades que asume la responsabilidad del poder. El administrador con ‘toque mágico’ para hacer posibles proyectos imposibles.",
+    energia: "Vigorosa, disciplinada, enfocada en manifestar grandes logros. Templo físico y mental: cuida el cuerpo con la misma dedicación que entrena la mente. Carisma que irradia poder y cercanía a la vez.",
+    aprendizaje: "Encontrar el equilibrio entre el éxito material y la contribución espiritual. Aprender a delegar y a cooperar desde la humildad. Manejar la presión interna por alcanzar metas, sin perder de vista la dimensión humana y colectiva de sus actos.",
+    talentos: "Visión global, mente estratégica, disciplina, fortaleza física y mental, capacidad de manifestar recursos y dirigir equipos, don para detectar oportunidades, carisma que motiva a los demás.",
+    caminoDeVida: "Construir proyectos y organizaciones con impacto global, dejando un mundo mejor que aquel en el que nació. Liderar con justicia y equidad, pero sin apegarse al poder una vez cumplida la misión.",
+    proposito: "Servir a la humanidad a gran escala, manifestando oportunidades y recursos allí donde parecían imposibles. Equilibrar autoridad y humildad para que el poder sea una herramienta de transformación positiva.",
+    mental: "Estratégica, calculadora y visionaria. Puede derivar en rigidez y excesivo control si no se nutre de valores espirituales y solidaridad real.",
+    emocionalRelaciones: "Conecta profundamente y genera un halo de poder cercano. Riesgo de primar el interés propio y de desconfiar de quienes no siguen su ritmo. Cuando fluye, protege y cuida con gran intensidad.",
+    trabajo: "Sobresale en altos cargos, liderando empresas, instituciones o proyectos que exijan fortaleza, visión y eficiencia. Delegar con maestría y asumir responsabilidades son su fuerte.",
+    familia: "Cumple un rol de protector y gestor de la estabilidad familiar. Debe vigilar no imponerse con autoritarismo ni dejar que su trabajo lo absorba completamente.",
+    territorio: "",
+    energetico: "Impresionante: puede manifestar recursos y oportunidades ‘de la nada’. Cuando se desorienta, pierde la conexión con su propósito profundo y se vuelve un mero acumulador de bienes.",
+    creativo: "Aplica la creatividad estratégica para la innovación en negocios y proyectos de gran magnitud. Con su determinación, impulsa ideas que otros descartarían.",
+    sexual: "Vigoroso, pasional, a veces controlador. Necesita confianza y estabilidad para disfrutar plenamente. El estrés y la ambición excesiva pueden mermar su capacidad de entrega real.",
+    conclusion: "El 44 encarna la capacidad de transformar la realidad a gran escala con un liderazgo sólido y carismático. Su misión es usar su poder, disciplina y visión para levantar proyectos que beneficien al conjunto, sin sucumbir a la seducción del ego y el mero éxito material."
+  },  
 };  
 
 
@@ -229,12 +320,55 @@ export const numerologyInfo = {
  * Suma las cifras de un número hasta que sea <= 9.
  */
 export function reduceNumber(num) {
-  if (num <= 9) return num;
-  return reduceNumber(
-    String(num)
-      .split('')
-      .reduce((acc, digit) => acc + parseInt(digit), 0)
-  );
+  // Si es undefined, null o NaN, devolver 0
+  if (num === undefined || num === null || isNaN(num)) return 0;
+  
+  // Convertir a número
+  const numValue = Number(num);
+  
+  // Si ya es un dígito, devolverlo
+  if (numValue >= 0 && numValue <= 9) return numValue;
+  
+  // Calcular la suma de los dígitos
+  const sum = String(numValue)
+    .split('')
+    .reduce((acc, digit) => acc + parseInt(digit), 0);
+  
+  // Recursión hasta obtener un dígito
+  return sum > 9 ? reduceNumber(sum) : sum;
+}
+
+/**
+ * Reduce un número a un dígito (1-9) pero preserva números maestros.
+ * Ejemplo: 25 -> 2+5 = 7, pero 11, 22, 33, 44 se mantienen.
+ */
+export function reduceNumberPreserveMaster(num) {
+  // Si es undefined, null o NaN, devolver 0
+  if (num === undefined || num === null || isNaN(num)) return 0;
+  
+  // Convertir a número
+  const numValue = Number(num);
+  
+  // Si ya es un dígito, devolverlo
+  if (numValue >= 0 && numValue <= 9) return numValue;
+  
+  // Preservar números maestros
+  if (numValue === 11 || numValue === 22 || numValue === 33 || numValue === 44) {
+    return numValue;
+  }
+  
+  // Calcular la suma de los dígitos
+  const sum = String(numValue)
+    .split('')
+    .reduce((acc, digit) => acc + parseInt(digit), 0);
+  
+  // Verificar si el resultado es un número maestro
+  if (sum === 11 || sum === 22 || sum === 33 || sum === 44) {
+    return sum;
+  }
+  
+  // Recursión hasta obtener un dígito o número maestro
+  return sum > 9 ? reduceNumberPreserveMaster(sum) : sum;
 }
 
 /**
@@ -252,15 +386,15 @@ export function subtractWithRules(a, b) {
  * Ajusta estas claves si tu app las renombra.
  */
 export const idealNumberMapping = {
-  masculine: 1,
-  feminine: 2,
-  challenge: 3,
-  work: 4,
-  energetic: 5,
-  emotional: 6,
-  mental: 7,
-  talent: 8,
-  personal: 9
+  masculineNumber: 1,
+  feminineNumber: 2,
+  challengeNumber: 3,
+  workFamilyNumber: 4,
+  energeticNumber: 5,
+  emotionalNumber: 6,
+  mentalNumber: 7,
+  talentNumber: 8,
+  personalityNumber: 9
 };
 
 /**
