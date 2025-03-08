@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/CalculadoraNumerologica/static/css/main.f52d8ab7.css",
+    "main.js": "/CalculadoraNumerologica/static/js/main.599be819.js",
+    "static/js/453.58509791.chunk.js": "/CalculadoraNumerologica/static/js/453.58509791.chunk.js",
+    "index.html": "/CalculadoraNumerologica/index.html",
+    "main.f52d8ab7.css.map": "/CalculadoraNumerologica/static/css/main.f52d8ab7.css.map",
+    "main.599be819.js.map": "/CalculadoraNumerologica/static/js/main.599be819.js.map",
+    "453.58509791.chunk.js.map": "/CalculadoraNumerologica/static/js/453.58509791.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f52d8ab7.css",
+    "static/js/main.599be819.js"
+  ]
+}
