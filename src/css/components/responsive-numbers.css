@@ -1,0 +1,182 @@
+/* Estilos responsivos para los números en la calculadora de numerología */
+
+/* Contenedor de números horizontales */
+.horizontal-numbers-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.3rem, 1vw, 0.8rem);
+  margin: clamp(1rem, 3vw, 2rem) 0;
+  padding: clamp(0.5rem, 2vw, 1rem);
+}
+
+/* Círculos de números básicos */
+.number-circle {
+  width: clamp(40px, 8vw, 65px);
+  height: clamp(40px, 8vw, 65px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+  border: 2px solid var(--color-turquoise);
+}
+
+.number-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.number-circle.selected {
+  background-color: var(--color-turquoise);
+  color: white;
+}
+
+/* Números maestros (dorados) */
+.master-number {
+  width: clamp(45px, 9vw, 70px);
+  height: clamp(45px, 9vw, 70px);
+  background-color: var(--color-gold-light);
+  color: var(--color-gold-dark);
+  border: 2px solid var(--color-gold-dark);
+  font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+}
+
+.master-number.selected {
+  background-color: var(--color-gold-dark);
+  color: white;
+}
+
+/* Rejilla de números */
+.numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(50px, 10vw, 80px), 1fr));
+  gap: clamp(0.5rem, 1vw, 1rem);
+  justify-content: center;
+  margin: clamp(1rem, 3vw, 2rem) 0;
+}
+
+/* Números en tablas */
+.table-number {
+  width: clamp(30px, 6vw, 50px);
+  height: clamp(30px, 6vw, 50px);
+  font-size: clamp(0.9rem, 1.8vw, 1.3rem);
+}
+
+/* Números de etapas vitales */
+.stage-circle, 
+.opportunity-circle, 
+.challenge-circle {
+  width: clamp(30px, 6vw, 45px);
+  height: clamp(30px, 6vw, 45px);
+  font-size: clamp(0.8rem, 1.6vw, 1.2rem);
+}
+
+/* Números de la tabla de años */
+.year-number {
+  font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+  font-weight: bold;
+}
+
+/* Números en la tabla ideal */
+.ideal-table-number {
+  width: clamp(35px, 7vw, 55px);
+  height: clamp(35px, 7vw, 55px);
+  font-size: clamp(0.9rem, 1.8vw, 1.3rem);
+}
+
+/* Animación para los números seleccionados */
+@keyframes pulseNumber {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.number-circle.selected,
+.master-number.selected {
+  animation: pulseNumber 2s infinite ease-in-out;
+}
+
+/* Universo Numérico - Optimización para móviles */
+.number-universe {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: clamp(0.5rem, 2vw, 1.5rem);
+  justify-content: center;
+  align-items: center;
+  padding: clamp(0.5rem, 2vw, 1.5rem);
+}
+
+.number-universe-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.number-universe-circle {
+  width: clamp(50px, 15vw, 80px);
+  height: clamp(50px, 15vw, 80px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+.number-universe-label {
+  font-size: clamp(0.7rem, 2vw, 1rem);
+  text-align: center;
+  max-width: 100px;
+  margin: 0 auto;
+}
+
+/* Responsive para pantallas muy pequeñas */
+@media (max-width: 380px) {
+  .horizontal-numbers-container {
+    gap: 0.2rem;
+  }
+  
+  .number-circle {
+    width: clamp(32px, 7vw, 40px);
+    height: clamp(32px, 7vw, 40px);
+    font-size: clamp(0.8rem, 1.6vw, 1rem);
+  }
+  
+  .master-number {
+    width: clamp(36px, 8vw, 45px);
+    height: clamp(36px, 8vw, 45px);
+    font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+  }
+  
+  .number-universe {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+  
+  .number-universe-circle {
+    width: clamp(45px, 13vw, 60px);
+    height: clamp(45px, 13vw, 60px);
+    font-size: clamp(1.3rem, 4vw, 2rem);
+  }
+  
+  .number-universe-label {
+    font-size: clamp(0.6rem, 1.8vw, 0.8rem);
+  }
+}

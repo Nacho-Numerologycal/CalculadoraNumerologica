@@ -1,0 +1,20 @@
+/* footer.css */
+
+.footer {
+  margin-top: auto;
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--color-gray-dark);
+  font-size: var(--font-size-sm);
+}
+
+.footer a {
+  color: var(--color-turquoise);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+.footer a:hover {
+  color: var(--color-gold);
+  text-decoration: underline;
+}

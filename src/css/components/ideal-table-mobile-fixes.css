@@ -1,0 +1,30 @@
+/* Correcciones para la tabla ideal en dispositivos móviles */
+
+@media (max-width: 768px) {
+  .ideal-table {
+    padding: 1rem 0.5rem;
+    overflow-x: auto; /* Permitir scroll horizontal */
+  }
+  
+  .ideal-table-grid {
+    min-width: 600px; /* Ancho mínimo para mostrar todos los números */
+  }
+  
+  .table-row {
+    grid-template-columns: 80px repeat(9, minmax(30px, 1fr));
+    gap: 0.25rem;
+  }
+  
+  .table-label {
+    font-size: 1.2rem;
+  }
+  
+  .ideal-number,
+  .real-number,
+  .excess-number,
+  .missing-number {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}

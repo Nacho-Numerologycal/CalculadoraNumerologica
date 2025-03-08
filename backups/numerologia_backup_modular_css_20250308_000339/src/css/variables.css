@@ -1,0 +1,51 @@
+/* variables.css */
+
+:root {
+  --color-turquoise: #046f8c;
+  --color-turquoise-light: #d1e5eb;
+  --color-turquoise-lighter: #e6f1f5;
+  
+  --color-gold: #a79063;
+  --color-gold-dark: #a79063;
+  --color-gold-light: #f5f0e6;
+  
+  --color-background: #F9F5F0;
+  --color-white: #FFFFFF;
+  --color-black: #555555;
+
+  --color-gray-dark: #666666;
+  --color-gray: #AAAAAA;
+  --color-gray-light: #EEEEEE;
+
+  --border-radius-sm: 6px;
+  --border-radius: 10px;
+  --border-radius-lg: 16px;
+  --border-radius-circle: 50%;
+
+  --box-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --box-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.16);
+
+  --transition-fast: all 0.2s ease;
+  --transition: all 0.3s ease;
+  --transition-slow: all 0.5s ease;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-xxl: 3rem;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-xxl: 2rem;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}

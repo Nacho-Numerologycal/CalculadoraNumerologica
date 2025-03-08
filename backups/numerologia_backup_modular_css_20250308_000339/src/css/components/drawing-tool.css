@@ -1,0 +1,131 @@
+/* drawing-tool.css */
+
+.drawing-container {
+  position: relative;
+  margin-top: var(--spacing-lg);
+}
+
+.canvas-container {
+  position: relative;
+  border: 2px solid var(--color-turquoise);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+  background-color: var(--color-white);
+}
+
+.drawing-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  justify-content: center;
+}
+
+.drawing-tool-btn {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawing-tool-btn:hover {
+  background-color: var(--color-turquoise-lighter);
+  border-color: var(--color-turquoise);
+}
+
+.drawing-tool-btn.active {
+  background-color: var(--color-turquoise-light);
+  border-color: var(--color-turquoise);
+  color: var(--color-turquoise);
+}
+
+.color-picker-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+  justify-content: center;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--border-radius-circle);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  border: 2px solid transparent;
+}
+
+.color-option:hover, 
+.color-option.active {
+  transform: scale(1.2);
+  border-color: var(--color-gray-dark);
+}
+
+.floating-color-picker {
+  position: fixed;
+  top: 7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--spacing-md);
+  z-index: 1000;
+}
+
+.blank-canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.blank-canvas-content {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  height: 80vh;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.blank-canvas-header {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-canvas-btn {
+  background: none;
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+}
+
+/* Asegurarse de que los controles de dibujo sean visibles en la ventana de dibujo en blanco */
+.blank-canvas-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background-color: var(--color-turquoise-lighter);
+  justify-content: center;
+}

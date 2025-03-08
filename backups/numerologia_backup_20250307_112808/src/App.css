@@ -1,0 +1,2503 @@
+/* Estilos generales */
+:root {
+  /* Paleta de colores principal */
+  --color-turquoise: #046f8c;        /* Azul marino (antes turquesa) */
+  --color-turquoise-light: #d1e5eb;  /* Azul marino claro para fondos */
+  --color-turquoise-lighter: #e6f1f5; /* Azul marino más claro para hover */
+  
+  --color-gold: #a79063;             /* Marrón claro (antes dorado) */
+  --color-gold-dark: #a79063;        /* Marrón claro para textos y acentos */
+  --color-gold-light: #f5f0e6;       /* Marrón claro para fondos */
+  
+  --color-background: #F9F5F0;       /* Fondo principal (beige suave) - sin cambios */
+  --color-white: #FFFFFF;            /* Blanco para tarjetas y contenedores - sin cambios */
+  --color-black: #555555;            /* Negro suave para texto principal */
+  
+  /* Colores de acento */
+  --color-red: #E86262;              /* Rojo para alertas y errores */
+  --color-blue: #5D9DE6;             /* Azul para información y enlaces */
+  --color-purple: #9D7AE6;           /* Púrpura para elementos destacados */
+  
+  /* Colores neutrales */
+  --color-gray-dark: #666666;        /* Gris oscuro para textos secundarios */
+  --color-gray: #AAAAAA;             /* Gris para bordes y separadores */
+  --color-gray-light: #EEEEEE;       /* Gris claro para fondos alternativos */
+  
+  /* Propiedades de diseño */
+  --border-radius-sm: 6px;           /* Bordes pequeños */
+  --border-radius: 10px;             /* Bordes medianos */
+  --border-radius-lg: 16px;          /* Bordes grandes */
+  --border-radius-circle: 50%;       /* Círculos */
+  
+  --box-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);  /* Sombra sutil */
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);     /* Sombra estándar */
+  --box-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.16); /* Sombra pronunciada */
+  
+  /* Transiciones */
+  --transition-fast: all 0.2s ease;   /* Transición rápida */
+  --transition: all 0.3s ease;        /* Transición estándar */
+  --transition-slow: all 0.5s ease;   /* Transición lenta */
+  
+  /* Espaciado */
+  --spacing-xs: 0.25rem;  /* 4px */
+  --spacing-sm: 0.5rem;   /* 8px */
+  --spacing-md: 1rem;     /* 16px */
+  --spacing-lg: 1.5rem;   /* 24px */
+  --spacing-xl: 2rem;     /* 32px */
+  --spacing-xxl: 3rem;    /* 48px */
+  
+  /* Tipografía */
+  --font-size-xs: 0.75rem;   /* 12px */
+  --font-size-sm: 0.875rem;  /* 14px */
+  --font-size-md: 1rem;      /* 16px */
+  --font-size-lg: 1.25rem;   /* 20px */
+  --font-size-xl: 1.5rem;    /* 24px */
+  --font-size-xxl: 2rem;     /* 32px */
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-black);
+  line-height: 1.6;
+  font-size: var(--font-size-md);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+  position: relative; /* Importante para posicionar el canvas correctamente */
+}
+
+/* Encabezado */
+.header {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  text-align: center;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: var(--spacing-xl);
+}
+
+.header h1 {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+}
+
+.header p {
+  font-size: var(--font-size-md);
+  opacity: 0.9;
+}
+
+/* Contenedor principal */
+.main-content {
+  position: relative;
+  width: 100%;
+}
+
+/* Contenedor principal */
+.calculator-container {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Sección de entrada */
+.input-section {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--box-shadow);
+  text-align: center;
+}
+
+.input-section h2 {
+  color: var(--color-gold-dark);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.date-inputs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.date-inputs input {
+  padding: 0.75rem;
+  border: 1px solid var(--color-gray);
+  border-radius: var(--border-radius);
+  font-size: 1.5rem;
+  font-weight: 600;
+  transition: var(--transition);
+  text-align: center;
+  width: 120px;
+}
+
+.date-inputs input::placeholder {
+  color: #CCCCCC; /* Gris más suave que el estándar */
+  opacity: 1; /* Firefox requiere esto para consistencia */
+}
+
+.date-inputs input:focus {
+  border-color: var(--color-turquoise);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(125, 209, 200, 0.3);
+}
+
+.calendar-picker {
+  position: relative;
+}
+
+.calendar-button {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  height: 100%;
+}
+
+.calendar-button:hover {
+  background-color: #6bc0b7;
+}
+
+/* Estilos para el datepicker */
+.react-datepicker-wrapper {
+  width: auto;
+}
+
+.react-datepicker__input-container input {
+  width: 100%;
+}
+
+.react-datepicker__year-dropdown,
+.react-datepicker__month-dropdown {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--border-radius);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.react-datepicker__year-dropdown-container,
+.react-datepicker__month-dropdown-container {
+  margin: 0 5px;
+}
+
+.react-datepicker__year-option,
+.react-datepicker__month-option {
+  padding: 8px 10px;
+  transition: var(--transition);
+}
+
+.react-datepicker__year-option:hover,
+.react-datepicker__month-option:hover {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+}
+
+.react-datepicker__navigation {
+  top: 10px;
+}
+
+.react-datepicker__header {
+  background-color: var(--color-brown-light);
+  border-bottom: 1px solid var(--color-gray);
+}
+
+.react-datepicker__day--selected {
+  background-color: var(--color-turquoise);
+}
+
+.react-datepicker__day:hover {
+  background-color: rgba(125, 209, 200, 0.3);
+}
+
+/* Estilos para el historial de fechas recientes */
+.recent-dates {
+  background-color: var(--color-brown-light);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  width: 100%;
+}
+
+.recent-dates h4 {
+  margin-bottom: 0.5rem;
+  color: var(--color-black);
+  font-size: 0.9rem;
+}
+
+.date-history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.date-history-item {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.date-history-item:hover {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  border-color: var(--color-turquoise);
+}
+
+/* Ajustes para inputs de fecha */
+input[type="text"] {
+  -moz-appearance: textfield;
+  appearance: textfield;  /* Propiedad estándar para compatibilidad */
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.calculate-btn {
+  background-color: var(--color-gold);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.calculate-btn:hover {
+  background-color: var(--color-gold-dark);
+  transform: translateY(-2px);
+}
+
+/* Sección de resultados */
+.results-section {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+  box-shadow: var(--box-shadow);
+  margin-bottom: var(--spacing-xl);
+}
+
+.results-section h2 {
+  color: var(--color-gold-dark);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.number-results {
+  margin-bottom: var(--spacing-xl);
+}
+
+.number-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.number-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.number-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--border-radius-circle);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--box-shadow-sm);
+}
+
+.number-cell:hover {
+  transform: scale(1.05);
+  box-shadow: var(--box-shadow);
+}
+
+.number-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-dark);
+  text-align: center;
+  max-width: 100px;
+}
+
+/* Números en grid */
+.numbers-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.numbers-section h3 {
+  color: var(--color-gold-dark);
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.grid-number {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.grid-number:hover {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  transform: scale(1.05);
+}
+
+.grid-number.selected {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  box-shadow: var(--box-shadow);
+}
+
+/* Contenedor de información y dibujo */
+.info-and-drawing-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 992px) {
+  .info-and-drawing-container {
+    flex-direction: row;
+  }
+  
+  .info-container {
+    flex: 1;
+    max-width: 50%;
+  }
+  
+  .drawing-container {
+    flex: 1;
+  }
+}
+
+/* Contenedor de información */
+.info-container {
+  background-color: var(--color-brown-light);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.number-info h3 {
+  color: var(--color-gold-dark);
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.info-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-gray);
+}
+
+.info-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.info-section h4 {
+  color: var(--color-turquoise);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.info-section p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+/* Contenedor a ancho completo */
+.full-width-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Estilos para la información de números */
+.number-info h3 {
+  color: var(--color-gold-dark);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.info-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.info-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.info-section h4 {
+  color: var(--color-turquoise);
+  margin-bottom: 0.8rem;
+  font-size: 1.3rem;
+}
+
+.info-section p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  text-align: justify;
+}
+
+/* Números horizontales */
+.horizontal-numbers-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: var(--spacing-lg);
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  box-shadow: var(--box-shadow);
+}
+
+.horizontal-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  padding: var(--spacing-sm);
+}
+
+.horizontal-number {
+  width: 45px;
+  height: 45px;
+  border-radius: var(--border-radius-circle);
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--box-shadow-sm);
+}
+
+.horizontal-number:hover {
+  transform: scale(1.1);
+  box-shadow: var(--box-shadow);
+}
+
+.horizontal-number.master {
+  background-color: var(--color-gold);
+}
+
+.horizontal-number.master:hover {
+  box-shadow: 0 0 8px rgba(230, 181, 74, 0.6);
+}
+
+/* Contenedor de información */
+.info-container.full-width {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: var(--spacing-lg);
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--box-shadow);
+}
+
+.number-info h3 {
+  color: var(--color-gold-dark);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+.info-section h4 {
+  color: var(--color-turquoise);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.info-section p {
+  font-size: var(--font-size-md);
+  line-height: 1.7;
+  text-align: justify;
+  color: var(--color-black);
+  margin-bottom: var(--spacing-md);
+}
+
+.info-section {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.info-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Números en grid */
+.numbers-section {
+  margin-bottom: 2rem;
+}
+
+.numbers-section h4 {
+  color: var(--color-gold-dark);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.numbers-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.number-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--color-turquoise-light);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.number-circle.master {
+  background-color: var(--color-gold);
+}
+
+.number-circle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(125, 209, 200, 0.6);
+}
+
+.number-circle.master:hover {
+  box-shadow: 0 0 8px rgba(240, 201, 135, 0.6);
+}
+
+/* Herramienta de dibujo */
+.drawing-tool {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  box-shadow: var(--box-shadow);
+  margin-bottom: var(--spacing-xl);
+}
+
+.drawing-tool h3 {
+  color: var(--color-gold-dark);
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.canvas-container {
+  width: 100%;
+  height: 300px;
+  margin-bottom: var(--spacing-md);
+  border: 1px solid var(--color-gray-light);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-white);
+  cursor: crosshair;
+}
+
+.drawing-controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-sm);
+}
+
+.drawing-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.drawing-btn:hover {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+}
+
+.drawing-btn.active {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+}
+
+.color-picker {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.color-option {
+  width: 25px;
+  height: 25px;
+  border-radius: var(--border-radius-circle);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 2px solid transparent;
+}
+
+.color-option.active {
+  transform: scale(1.2);
+  border: 2px solid var(--color-white);
+  box-shadow: var(--box-shadow-sm);
+}
+
+/* Tabla de Etapas Vitales */
+.life-stages-table {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  margin-bottom: var(--spacing-xl);
+}
+
+.life-stages-table h3 {
+  color: var(--color-gold-dark);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  font-size: var(--font-size-lg);
+  font-weight: 700; /* Cambiado de var(--font-weight-semibold) a 700 para negrita */
+}
+
+.stages-table {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--spacing-md);
+}
+
+.stages-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-dark);
+  display: flex;
+  align-items: center;
+}
+
+.stages-row {
+  display: flex;
+  gap: var(--spacing-md);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-sm);
+}
+
+.stage-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-circle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+  position: relative;
+  background-color: #f5f0e6 !important; /* Mismo color que las celdas de la tabla de energía anual */
+  color: var(--color-gold-dark);
+  border: 2px solid var(--color-gold-dark);
+}
+
+.stage-circle.current {
+  background-color: #1abc9c;
+  color: var(--color-white);
+  border: 2px solid #1abc9c;
+}
+
+.current-stage-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  position: relative;
+  font-size: 1.2rem;
+  background-color: var(--color-turquoise) !important; /* Azul marino */
+  color: white;
+  border: 2px solid var(--color-turquoise) !important;
+}
+
+.current-stage-circle::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--color-turquoise);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.opportunity-circle {
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+  cursor: pointer;
+}
+
+.opportunity-circle:hover {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+}
+
+.challenge-circle {
+  background-color: var(--color-gold-light);
+  color: var(--color-gold-dark);
+  cursor: pointer;
+}
+
+.challenge-circle:hover {
+  background-color: var(--color-gold);
+  color: var(--color-white);
+}
+
+.separator-line {
+  height: 1px;
+  background-color: var(--color-gray-light);
+  margin: var(--spacing-md) 0;
+}
+
+/* Pie de página */
+.footer {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+/* Estilos para las tablas y el universo numérico */
+.additional-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+  padding: 0 1rem;
+}
+
+.additional-sections h3 {
+  color: var(--color-gold-dark);
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+/* Universo Numérico */
+.numerical-universe {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.universe-title {
+  color: var(--color-gold-dark);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.universe-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.universe-row {
+  display: flex;
+  justify-content: center;
+  gap: 8rem;
+  width: 100%;
+  position: relative;
+}
+
+.universe-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  width: 180px; /* Ancho fijo para todos los elementos */
+}
+
+.universe-item .number-cell {
+  width: 70px;
+  height: 70px;
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  font-size: 1.8rem;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.universe-item .number-cell:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(125, 209, 200, 0.5);
+}
+
+.universe-item .number-cell.diamond {
+  transform: rotate(45deg);
+  border-radius: 4px;
+  background-color: var(--color-gold);
+}
+
+.universe-item .number-cell.diamond > span {
+  transform: rotate(-45deg);
+  display: inline-block;
+}
+
+.universe-item .number-cell.diamond:hover {
+  transform: rotate(45deg) scale(1.1);
+}
+
+.universe-item .number-cell.turquoise-bg {
+  background-color: var(--color-turquoise);
+}
+
+.universe-item .number-cell.gold-bg {
+  background-color: var(--color-gold);
+}
+
+.universe-item .number-label {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-black);
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+
+/* Estilos específicos para las filas del universo numérico */
+.universe-row:nth-child(1) {
+  margin-bottom: 1rem;
+}
+
+.universe-row:nth-child(3) {
+  margin-top: 1rem;
+}
+
+/* Estilos específicos para las columnas del universo numérico */
+.universe-row:nth-child(3) .universe-item {
+  flex: 1;
+  max-width: 180px;
+}
+
+/* Estilos específicos para el número emocional y mental para alinearlos correctamente */
+.universe-row:nth-child(3) {
+  justify-content: space-around;
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* Estilos para la fila de trabajo y energético */
+.universe-row:nth-child(5) {
+  justify-content: space-around;
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* Estilos para la fila de reto */
+.universe-row:nth-child(6) {
+  margin-top: 1rem;
+}
+
+/* Tabla Ideal */
+.ideal-table {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.ideal-table-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 100px repeat(9, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.table-label {
+  font-weight: bold;
+  color: var(--color-black);
+  text-align: right;
+  padding-right: 1rem;
+}
+
+.ideal-number,
+.real-number,
+.excess-number,
+.missing-number {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+  margin: 0 auto;
+  font-size: 1.2rem;
+  position: relative;
+}
+
+/* Añadimos el círculo exterior para todos los números */
+.ideal-number::before,
+.real-number::before,
+.excess-number::before,
+.missing-number::before {
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--color-gold-dark);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.ideal-number {
+  background-color: #f5f0e6;
+  color: var(--color-gold-dark);
+  border: 2px solid var(--color-gold-dark);
+}
+
+.ideal-number::before {
+  border: 1px solid var(--color-gold-dark);
+}
+
+.real-number {
+  background-color: #f5f0e6;
+  color: var(--color-gold-dark);
+  border: 2px solid var(--color-gold-dark);
+}
+
+.real-number::before {
+  border: 1px solid var(--color-gold-dark);
+}
+
+.excess-number {
+  background-color: #cfe9ea; /* Azul claro */
+  color: #046f8c; /* Azul marino */
+  border: 2px solid #046f8c; /* Azul marino */
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.excess-number::before {
+  border: 1px solid #046f8c; /* Azul marino */
+}
+
+.missing-number {
+  background-color: #cfe9ea; /* Azul claro */
+  color: #046f8c; /* Azul marino */
+  border: 2px solid #046f8c; /* Azul marino */
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.missing-number::before {
+  border: 1px solid #046f8c; /* Azul marino */
+}
+
+.clickable {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.clickable:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Tabla de Años */
+.years-table-container {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.table-title {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--color-gold-dark);
+  font-size: 1.5rem;
+}
+
+.years-table-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 600px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 2px solid #e0e0e0;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Estilo para los encabezados de la tabla de años */
+.years-table-grid .table-header {
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+  font-size: 1.2rem;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #e0e0e0;
+  min-width: 100px;
+  color: var(--color-turquoise);
+}
+
+/* Estilo para las celdas de la tabla de años */
+.years-table-grid .table-cell {
+  padding: 1rem 0.75rem;
+  border: 1px solid #e0e0e0;
+  background-color: var(--color-white);
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  min-width: 100px;
+  color: var(--color-turquoise);
+}
+
+/* Estilo para la primera columna (encabezados) */
+.years-table-grid .table-header:first-child,
+.years-table-grid .table-header:nth-child(5),
+.years-table-grid .table-header:nth-child(9),
+.years-table-grid .table-header:nth-child(13),
+.years-table-grid .table-header:nth-child(17) {
+  color: var(--color-turquoise);
+  background-color: var(--color-turquoise-light);
+  font-weight: bold;
+  text-align: left;
+  padding-left: 1rem;
+}
+
+/* Estilo para la edad actual */
+.years-table-grid .current-year-column[data-type="age"] {
+  color: var(--color-gold-dark);
+}
+
+/* Estilo para los años en la tabla */
+.years-table-grid .table-cell[data-type="year"] {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-turquoise);
+}
+
+/* Estilo para el año actual */
+.years-table-grid .current-year-column[data-type="year"] {
+  color: var(--color-gold-dark);
+}
+
+/* Componentes de la fecha */
+.date-components {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  box-shadow: var(--box-shadow);
+  margin-bottom: var(--spacing-xl);
+}
+
+.date-components h3 {
+  color: var(--color-gold-dark);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.date-component {
+  background-color: var(--color-turquoise-light);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.component-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-dark);
+  margin-bottom: var(--spacing-xs);
+}
+
+.component-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-turquoise);
+}
+
+.component-value.master {
+  color: var(--color-gold-dark);
+}
+
+.total-sum {
+  background-color: var(--color-gold-light);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-md);
+  text-align: center;
+  margin-top: var(--spacing-md);
+}
+
+.total-sum .component-value {
+  color: var(--color-gold-dark);
+}
+
+/* Pie de página */
+.footer {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  padding: var(--spacing-lg);
+  text-align: center;
+  margin-top: auto;
+  border-radius: var(--border-radius);
+}
+
+.footer p {
+  font-size: var(--font-size-sm);
+  opacity: 0.9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app {
+    padding: var(--spacing-sm);
+  }
+  
+  .header h1 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .date-inputs {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .date-inputs input {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+  
+  .calendar-picker {
+    margin: 0 auto;
+  }
+  
+  .calendar-button {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .number-universe {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .number-grid {
+    gap: 1rem;
+  }
+  
+  .number-cell {
+    width: 50px;
+    height: 50px;
+    font-size: var(--font-size-lg);
+  }
+  
+  .horizontal-number {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .stage-circle, .opportunity-circle, .challenge-circle {
+    width: 35px;
+    height: 35px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 576px) {
+  .years-table {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  .date-inputs input {
+    font-size: 1.3rem;
+  }
+  
+  .date-history-item {
+    font-size: 1.1rem;
+  }
+  
+  .number-grid {
+    gap: var(--spacing-sm);
+  }
+  
+  .number-cell {
+    width: 45px;
+    height: 45px;
+    font-size: var(--font-size-md);
+  }
+  
+  .horizontal-number {
+    width: 35px;
+    height: 35px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Sección de números maestros */
+.master-numbers-section {
+  background-color: var(--color-grayLight);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.master-numbers-section h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--color-turquoise);
+  font-size: 1.1rem;
+}
+
+.master-numbers-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.master-number-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.master-number-type {
+  font-weight: 500;
+}
+
+.special-number-note {
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-gray);
+}
+
+.special-number-note p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+/* Estilo para la sección de componentes de fecha */
+.date-components-section {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.date-components-section h3 {
+  text-align: center;
+  color: var(--color-gold-dark);
+  margin-bottom: 20px;
+}
+
+.date-components-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.date-component {
+  background-color: #f9f5f0;
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.date-component-label {
+  font-size: 14px;
+  color: #8b5a2b;
+  margin-bottom: 5px;
+}
+
+.date-component-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--color-turquoise);
+  margin-bottom: 5px;
+}
+
+.date-component-value.master-number {
+  color: var(--color-gold);
+  cursor: pointer;
+}
+
+.date-component-value.master-number:hover {
+  text-decoration: underline;
+}
+
+.hidden-master-numbers {
+  background-color: #f9f5f0;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.hidden-master-numbers h4 {
+  text-align: center;
+  color: #8b5a2b;
+  margin-bottom: 15px;
+}
+
+.hidden-master-formula {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e0d5c1;
+}
+
+.hidden-master-formula:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.formula {
+  font-size: 16px;
+  color: #333;
+}
+
+.master-number {
+  font-size: 18px;
+  font-weight: bold;
+  color: #8b5a2b;
+  cursor: pointer;
+}
+
+.master-number:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para la tabla de etapas vitales con el nuevo diseño */
+.life-stages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.life-stages-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.life-stages-label {
+  color: var(--color-turquoise);
+  font-size: 1.5rem;
+  font-weight: bold;
+  width: 180px;
+  text-align: left;
+}
+
+.life-stage-item {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.life-stage-number {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+.stage-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  background-color: #f5f0e6 !important; /* Mismo color que las celdas de la tabla de energía anual */
+  color: var(--color-gold-dark);
+  position: relative;
+  font-size: 1.2rem;
+  border: 2px solid var(--color-gold-dark);
+}
+
+.stage-circle::before {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--color-gold-dark);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.current-stage-circle {
+  background-color: var(--color-turquoise) !important; /* Azul marino */
+  color: white;
+  border: 2px solid var(--color-turquoise) !important;
+}
+
+.opportunity-number,
+.challenge-number {
+  font-size: 2rem;
+  color: var(--color-turquoise);
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+  position: relative;
+  display: inline-block;
+  z-index: 1; /* Asegura que el número esté por encima del pseudo-elemento */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.challenge-number {
+  color: var(--color-gold);
+}
+
+.opportunity-number:hover,
+.challenge-number:hover {
+  transform: scale(1.1);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.life-stages-divider {
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-gold), transparent);
+  margin: 0.5rem 0;
+}
+
+/* Estilos responsivos para la tabla de etapas vitales */
+@media (max-width: 768px) {
+  .life-stages-label {
+    width: 120px;
+    font-size: 1.2rem;
+  }
+  
+  .stage-circle {
+    width: 60px;
+    height: 60px;
+    font-size: 1rem;
+  }
+  
+  .stage-circle::before {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .opportunity-number,
+  .challenge-number {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .life-stages-container {
+    padding: 0.5rem 0;
+  }
+  
+  .life-stages-label {
+    width: 100px;
+    font-size: 1rem;
+  }
+  
+  .stage-circle {
+    width: 50px;
+    height: 50px;
+    font-size: 0.9rem;
+  }
+  
+  .stage-circle::before {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .opportunity-number,
+  .challenge-number {
+    font-size: 1.5rem;
+  }
+}
+
+/* Estilo para la columna del año actual */
+.current-year-column {
+  background-color: #f5f0e6 !important;
+  border: 1px solid var(--color-gold-dark) !important;
+  box-shadow: 0 0 5px rgba(226, 177, 91, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
+/* Estilos para la tabla de años */
+.years-table,
+.life-stages-table {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.years-table-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 500px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  border: 2px solid #e0e0e0;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Estilo para los encabezados de la tabla de años */
+.years-table .table-header {
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+  font-size: 1.2rem;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #e0e0e0;
+}
+
+/* Estilo para las celdas de la tabla de años */
+.years-table .table-cell {
+  padding: 1rem 0.75rem;
+  border: 1px solid #e0e0e0;
+  background-color: var(--color-brown-light);
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+/* Estilo para la primera columna (encabezados) */
+.years-table-grid .table-header:first-child,
+.years-table-grid .table-header:nth-child(5),
+.years-table-grid .table-header:nth-child(9),
+.years-table-grid .table-header:nth-child(13),
+.years-table-grid .table-header:nth-child(17) {
+  color: var(--color-turquoise);
+  background-color: var(--color-turquoise-light);
+  font-weight: bold;
+  text-align: left;
+  padding-left: 1rem;
+}
+
+/* Estilo para la edad actual */
+.years-table .current-age {
+  font-weight: bold;
+  color: var(--color-gold-dark);
+}
+
+/* Estilo para los números maestros en la tabla de años */
+.years-table .master-number {
+  color: var(--color-gold);
+  font-weight: bold;
+}
+
+/* Estilo para los números normales en la tabla de años */
+.years-table .result-value {
+  color: var(--color-turquoise);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Estilo para las edades */
+.years-table .age-value {
+  color: var(--color-turquoise);
+  font-size: 1.8rem;
+  font-weight: var(--font-weight-bold);
+}
+
+/* Estilo para los títulos de sección */
+.years-table h3 {
+  color: var(--color-gold);
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+/* Ajustes responsivos para la tabla de años */
+@media (max-width: 768px) {
+  .years-table-grid {
+    max-width: 100%;
+    font-size: 0.9rem;
+  }
+  
+  .years-table .table-cell {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .years-table .result-value,
+  .years-table .age-value {
+    font-size: 1.2rem;
+  }
+}
+
+/* Estilos para la tabla de etapas vitales */
+.life-stages-table-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid var(--color-gray-light);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.table-header {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  font-weight: bold;
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.table-cell {
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-gray-light);
+  border-right: 1px solid var(--color-gray-light);
+}
+
+.table-cell:last-child {
+  border-right: none;
+}
+
+.table-cell.clickable {
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+/* Estilo para la etapa actual en la tabla de etapas vitales */
+.current-stage {
+  background-color: rgba(125, 209, 200, 0.2); /* Color turquesa con transparencia */
+  font-weight: bold;
+}
+
+/* Ajustes responsivos para las tablas */
+@media (max-width: 768px) {
+  .table-row {
+    grid-template-columns: 80px repeat(9, 1fr);
+    gap: 0.25rem;
+  }
+  
+  .ideal-number,
+  .excess-number,
+  .real-number,
+  .missing-number {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+  }
+  
+  .years-table-grid {
+    font-size: 0.9rem;
+  }
+  
+  .table-header,
+  .table-cell {
+    padding: 0.5rem 0.25rem;
+  }
+}
+
+/* Estilos para los resultados detallados */
+.detailed-results {
+  margin-top: 1.5rem;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+}
+
+.result-item {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.result-label {
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.result-value {
+  font-size: 1.3rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.result-value:hover {
+  transform: scale(1.1);
+}
+
+.result-value.master-number {
+  color: var(--color-gold);
+  font-weight: bold;
+}
+
+.result-value.zero-value {
+  color: var(--color-gold);
+  font-weight: bold;
+}
+
+.result-value.age-value {
+  color: var(--color-turquoise);
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.detailed-results .age-value {
+  color: var(--color-turquoise);
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+@media (max-width: 768px) {
+  .detailed-results {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Estilos para la tabla de años */
+.years-table {
+  margin: 2rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .calculator-container {
+    padding: 1rem;
+  }
+  
+  .date-inputs {
+    flex-direction: column;
+  }
+  
+  .date-inputs input {
+    width: 100%;
+  }
+  
+  .number-grid {
+    gap: 1rem;
+  }
+  
+  .number-cell {
+    width: 50px;
+    height: 50px;
+    font-size: var(--font-size-lg);
+  }
+  
+  .horizontal-number {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .stage-circle, .opportunity-circle, .challenge-circle {
+    width: 35px;
+    height: 35px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 576px) {
+  .years-table {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  .number-grid {
+    gap: var(--spacing-sm);
+  }
+  
+  .number-cell {
+    width: 45px;
+    height: 45px;
+    font-size: var(--font-size-md);
+  }
+  
+  .horizontal-number {
+    width: 35px;
+    height: 35px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* Botón flotante para herramienta de dibujo */
+.floating-draw-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: var(--box-shadow-lg);
+  cursor: pointer;
+  z-index: 1000;
+  transition: var(--transition);
+  font-size: 1.5rem;
+}
+
+.floating-draw-button:hover {
+  transform: scale(1.1);
+  background-color: var(--color-gold);
+}
+
+/* Herramienta de dibujo flotante */
+.floating-drawing-tool {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  pointer-events: none; /* Permite que los clics pasen a través del contenedor */
+}
+
+.floating-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto; /* Captura eventos en el canvas */
+}
+
+.floating-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.floating-drawing-controls {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.8rem;
+  background-color: var(--color-white);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+  pointer-events: auto; /* Captura eventos en los controles */
+  z-index: 1001;
+}
+
+.floating-drawing-controls .drawing-btn {
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1.3rem;
+}
+
+.floating-drawing-controls .drawing-btn:hover {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  transform: scale(1.1);
+}
+
+.floating-drawing-controls .drawing-btn.active {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  transform: scale(1.1);
+}
+
+.floating-color-picker {
+  position: fixed;
+  top: 7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.8rem;
+  background-color: var(--color-white);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+  pointer-events: auto; /* Captura eventos en el selector de colores */
+  z-index: 1001;
+}
+
+.floating-color-picker .color-option {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 3px solid transparent;
+}
+
+.floating-color-picker .color-option.active {
+  transform: scale(1.2);
+  border: 3px solid var(--color-white);
+  box-shadow: var(--box-shadow-sm);
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .floating-draw-button {
+    width: 60px;
+    height: 60px;
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .floating-drawing-controls {
+    padding: 0.8rem;
+  }
+  
+  .floating-drawing-controls .drawing-btn {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .floating-color-picker {
+    top: 6rem;
+  }
+  
+  .floating-color-picker .color-option {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-draw-button {
+    width: 55px;
+    height: 55px;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
+  .floating-drawing-controls {
+    gap: 0.5rem;
+  }
+  
+  .floating-drawing-controls .drawing-btn {
+    width: 42px;
+    height: 42px;
+  }
+  
+  .floating-color-picker .color-option {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Herramienta de dibujo flotante */
+.floating-drawing-tool {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  pointer-events: none; /* Permite que los clics pasen a través del contenedor */
+}
+
+.floating-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  pointer-events: auto; /* Captura eventos en el canvas */
+}
+
+/* Controles de dibujo */
+.floating-drawing-controls {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.8rem;
+  background-color: var(--color-white);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+  pointer-events: auto; /* Captura eventos en los controles */
+  z-index: 1001;
+}
+
+/* Estilos para la herramienta de dibujo */
+.drawing-tool-container {
+  position: relative;
+  width: 100%;
+  margin-top: 2rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.drawing-canvas {
+  display: block;
+  width: 100%;
+  height: 300px;
+  background-color: rgba(255, 255, 255, 0.9);
+  cursor: crosshair;
+}
+
+/* Estilos para la herramienta de dibujo flotante */
+.floating-drawing-tool {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 998;
+  pointer-events: none;
+}
+
+.floating-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.drawing-tool-container,
+.drawing-canvas {
+  display: none;
+}
+
+/* Estilos para el selector de grosor */
+.floating-line-width-picker {
+  position: fixed;
+  top: 7rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+}
+
+.line-width-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0.25rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.line-width-option:hover {
+  background-color: var(--color-light-gray);
+}
+
+.line-width-option.active {
+  background-color: var(--color-light-gray);
+}
+
+.line-width-preview {
+  height: 4px;
+  background-color: var(--color-black);
+  border-radius: 2px;
+}
+
+/* Estilos para el icono del puntero láser */
+.laser-icon {
+  color: red;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+/* Estilos para la sección desplegable de números maestros ocultos */
+.hidden-master-numbers details {
+  margin: 1rem 0;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.hidden-master-numbers summary {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background-color: var(--color-turquoise-light);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.hidden-master-numbers summary:hover {
+  background-color: var(--color-turquoise-lighter);
+}
+
+.hidden-master-numbers summary h4 {
+  margin: 0;
+  display: inline-block;
+  color: var(--color-turquoise);
+}
+
+.hidden-master-numbers .master-numbers-list {
+  padding: 1rem;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-turquoise-light);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.hidden-master-numbers .hidden-master-formula {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.hidden-master-numbers .hidden-master-formula:last-child {
+  margin-bottom: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.hidden-master-numbers .formula {
+  flex-grow: 1;
+  padding-right: 1rem;
+}
+
+.hidden-master-numbers .master-number {
+  font-weight: bold;
+  color: var(--color-gold-dark);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.hidden-master-numbers .master-number:hover {
+  color: var(--color-gold);
+  transform: scale(1.1);
+}
+
+/* Estilo para los números en la tabla */
+.years-table-grid .table-cell[data-type="number"] {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-turquoise);
+}
+
+/* Estilo para los números en la columna del año actual */
+.years-table-grid .current-year-column[data-type="number"] {
+  color: var(--color-gold-dark);
+}
+
+.years-table-grid .table-cell .result-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-turquoise);
+}
+
+.years-table-grid .current-year-column .result-value {
+  color: var(--color-gold-dark);
+}
+
+/* Estilos para títulos en negrita */
+.bold-title {
+  font-weight: 700;
+  color: var(--color-gold-dark);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Estilos para los números en grid */
+.numbers-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.number-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--border-radius-circle);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--box-shadow-sm);
+}
+
+.number-cell:hover {
+  transform: scale(1.05);
+  box-shadow: var(--box-shadow);
+}
+
+/* Estilos para secciones plegables */
+.collapsible-section {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--gold-color);
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.toggle-icon {
+  transition: transform 0.3s ease;
+}
+
+.collapsible-section.closed .toggle-icon {
+  transform: rotate(180deg);
+}
+
+.section-content {
+  max-height: 2000px;
+  transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.section-content.hidden {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+/* Ajustes para tablas dentro de secciones plegables */
+.collapsible-section .ideal-table,
+.collapsible-section .life-stages-table,
+.collapsible-section .years-table-container,
+.collapsible-section .numerical-universe {
+  padding: 15px;
+}
+
+/* Ajustes para la tabla de energía anual */
+.collapsible-section .years-table-grid .table-cell {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--turquoise-color);
+}
+
+.collapsible-section .years-table-grid .current-year-column {
+  background-color: rgba(255, 215, 0, 0.2);
+  color: var(--gold-color);
+}
+
+/* Ajustes para oportunidades y retos en etapas vitales */
+.collapsible-section .opportunity-number,
+.collapsible-section .challenge-number {
+  width: 50px;
+  height: 50px;
+  font-size: 1.2rem;
+}

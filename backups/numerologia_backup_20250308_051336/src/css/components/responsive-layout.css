@@ -1,0 +1,270 @@
+/* Estilos de responsividad moderna usando Grid, Flexbox, clamp() y auto-fit/auto-fill */
+
+/* ===== LAYOUTS PRINCIPALES ===== */
+
+/* Layout principal de la aplicación */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: clamp(300px, 95%, 1200px);
+  margin: 0 auto;
+  padding: clamp(0.5rem, 2vw, 1.5rem);
+  position: relative;
+}
+
+/* Layout de secciones con Grid */
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* Layout para elementos en fila que se adaptan a columna en móvil */
+.flex-row-to-column {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 2vw, 1.5rem);
+}
+
+/* ===== COMPONENTES RESPONSIVOS ===== */
+
+/* Encabezado responsivo */
+.header {
+  padding: clamp(1rem, 3vw, 2rem);
+  margin-bottom: clamp(1rem, 4vw, 2.5rem);
+}
+
+.header h1 {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+}
+
+.header p {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+/* Entradas de fecha responsivas */
+.date-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+/* Contenedor principal para secciones */
+.main-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Contenedor a ancho completo */
+.full-width-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Estilos específicos para dispositivos móviles */
+@media (max-width: 768px) {
+  .app {
+    padding: clamp(0.3rem, 1vw, 0.8rem);
+  }
+  
+  .main-container, 
+  .full-width-container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .section-grid {
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .collapsible-section {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* Estilos específicos para dispositivos pequeños */
+@media (max-width: 576px) {
+  .app {
+    padding: clamp(0.2rem, 0.5vw, 0.5rem);
+  }
+  
+  .main-container, 
+  .full-width-container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .section-grid {
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  
+  .collapsible-section {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+  
+  .header {
+    padding: 0.8rem 0.5rem;
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* Estilos específicos para dispositivos muy pequeños */
+@media (max-width: 380px) {
+  .app {
+    padding: 0.1rem;
+  }
+  
+  .main-container, 
+  .full-width-container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .section-grid {
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .header {
+    padding: 0.6rem 0.3rem;
+    margin-bottom: 0.6rem;
+  }
+}
+
+/* ===== TABLAS RESPONSIVAS ===== */
+
+/* Contenedor de tabla con scroll horizontal */
+.responsive-table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+.responsive-table-container table {
+  min-width: 600px;
+  width: 100%;
+}
+
+/* Tabla de años */
+.years-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(250px, 40vw, 350px), 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+/* ===== TARJETAS Y SECCIONES ===== */
+
+/* Tarjetas responsivas */
+.card {
+  padding: clamp(1rem, 3vw, 2rem);
+  border-radius: clamp(8px, 1vw, 16px);
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+/* Sección de información de números */
+.number-info {
+  padding: clamp(1rem, 3vw, 2rem);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.6;
+}
+
+.number-info h3 {
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+}
+
+.number-info h4 {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
+/* ===== COMPONENTES DE FECHA ===== */
+
+.date-components-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(120px, 20vw, 200px), 1fr));
+  gap: clamp(0.5rem, 2vw, 1rem);
+}
+
+.date-component-value {
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+}
+
+.date-component-label {
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+}
+
+/* ===== VENTANA FLOTANTE ===== */
+
+.floating-number-info {
+  height: clamp(30vh, 40vh, 50vh);
+}
+
+.floating-number-info h3 {
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+}
+
+.floating-number-info h4 {
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+}
+
+.floating-number-info p {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+}
+
+/* ===== HERRAMIENTAS DE DIBUJO ===== */
+
+.drawing-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+.drawing-tool-button {
+  padding: clamp(0.5rem, 1vw, 0.8rem);
+  font-size: clamp(0.8rem, 1.5vw, 1rem);
+}
+
+/* ===== UTILIDADES RESPONSIVAS ===== */
+
+/* Espaciado responsivo */
+.responsive-margin {
+  margin: clamp(0.5rem, 2vw, 2rem);
+}
+
+.responsive-padding {
+  padding: clamp(0.5rem, 2vw, 2rem);
+}
+
+/* Ocultar en móvil */
+@media (max-width: 576px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+/* Ocultar en tablet */
+@media (min-width: 577px) and (max-width: 768px) {
+  .hide-on-tablet {
+    display: none;
+  }
+}
+
+/* Ocultar en desktop */
+@media (min-width: 769px) {
+  .hide-on-desktop {
+    display: none;
+  }
+}

@@ -1,0 +1,55 @@
+/* Correcciones para la tabla ideal - mantener 9 columnas en móvil */
+
+/* Tabla Ideal */
+.ideal-table {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+  overflow-x: auto; /* scroll horizontal */
+}
+
+.ideal-table-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  min-width: 900px; /* sube a 900px para meter 9 columnas */
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 100px repeat(9, minmax(30px, 1fr)); /* 9 columnas */
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* MEDIA QUERY MÓVIL */
+/* Ajusta sin recortar columnas */
+@media (max-width: 768px) {
+  /* Mantenemos 9 columnas, solo reducimos tamaños */
+  .table-row {
+    grid-template-columns: 80px repeat(9, minmax(25px, 1fr));
+    gap: 0.25rem;
+  }
+
+  .ideal-number,
+  .excess-number,
+  .real-number,
+  .missing-number {
+    width: 30px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+  
+  /* Si necesitas cambiar la .table-label en móvil: */
+  .table-label {
+    font-size: 1.2rem;
+  }
+
+  .ideal-table-grid {
+    min-width: 700px; /* O 800px, ajusta si quieres un scroll más corto. */
+  }
+}

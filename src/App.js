@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Calculator, X, PenLine, Eraser, RotateCcw, Palette, Calendar } from 'lucide-react';
+import { Calculator, X, PenLine, Eraser, RotateCcw, Palette, Calendar, Square, ChevronDown, ChevronUp } from 'lucide-react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import es from 'date-fns/locale/es';
 import "react-datepicker/dist/react-datepicker.css";
 import './App.css';
+import './css/components/spacing.css';
+import './css/components/floating-number-info.css';
+import './css/components/ideal-table-mobile-fixes.css';
+import './css/components/ideal-table-fixes.css';
+import './css/components/life-stages-fixes.css';
 import { 
   numerologyInfo, 
   reduceNumber, 
@@ -12,6 +17,8 @@ import {
   calculateExcessAndMissing,
   idealNumberMapping
 } from './numerologyData';
+import CollapsibleSection from './components/CollapsibleSection';
+import FloatingNumberInfo from './components/FloatingNumberInfo';
 
 // Paleta de colores inspirada en tu imagen
 const colors = {
@@ -50,23 +57,29 @@ const App = () => {
   const [selectedNumberType, setSelectedNumberType] = useState(null);
   const [calculated, setCalculated] = useState(false);
   
+  // Estados para la ventana flotante de información de números
+  const [isNumberInfoOpen, setIsNumberInfoOpen] = useState(false);
+  const [floatingNumberInfoContent, setFloatingNumberInfoContent] = useState(null);
+  
   // Estados para herramienta de dibujo
   const [isDrawing, setIsDrawing] = useState(false);
-  const [drawingTool, setDrawingTool] = useState('pen'); // 'pen', 'eraser', o 'laser'
-  const [currentColor, setCurrentColor] = useState(colors.black);
-  const [lineWidth, setLineWidth] = useState(4); // Grosor del trazo
+  const [drawingTool, setDrawingTool] = useState('laser'); // 'pen', 'eraser', o 'laser'
+  const [currentColor, setCurrentColor] = useState('#FF6B6B'); // Cambiado a rojo por defecto
+  const [lineWidth, setLineWidth] = useState(8); // Cambiado a máximo grosor por defecto
   const [showLineWidthPicker, setShowLineWidthPicker] = useState(false); // Mostrar selector de grosor
   const [laserTrail, setLaserTrail] = useState([]); // Puntos para la estela del láser
   const [lastPosition, setLastPosition] = useState({ x: 0, y: 0 });
   const [scrollPosition, setScrollPosition] = useState(0);
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [showDrawingTool, setShowDrawingTool] = useState(false);
+  const [showDrawingCanvas, setShowDrawingCanvas] = useState(false);
   
   // Referencias para el canvas
   const canvasRef = useRef(null);
   const canvasContainerRef = useRef(null);
   const appContentRef = useRef(null);
   const ctxRef = useRef(null);
+  const blankCanvasRef = useRef(null); // Referencia para el canvas en blanco
 
   // Función para alternar la herramienta de dibujo
   const toggleDrawingTool = () => {
@@ -83,13 +96,15 @@ const App = () => {
   
   // Configurar el canvas
   const setupCanvas = () => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current && !blankCanvasRef.current) return;
     
-    const canvas = canvasRef.current;
+    // Determinar qué canvas configurar
+    const canvas = showDrawingCanvas ? blankCanvasRef.current : canvasRef.current;
+    if (!canvas) return;
     
     // Configurar el tamaño del canvas para que cubra toda la ventana
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = showDrawingCanvas ? canvas.parentElement.clientWidth : window.innerWidth;
+    canvas.height = showDrawingCanvas ? canvas.parentElement.clientHeight : window.innerHeight;
     
     // Configurar el contexto
     const ctx = canvas.getContext('2d');
@@ -107,14 +122,14 @@ const App = () => {
 
   // Función para iniciar el dibujo
   const startDrawing = (e) => {
-    if (!canvasRef.current) return;
+    const canvas = showDrawingCanvas ? blankCanvasRef.current : canvasRef.current;
+    if (!canvas) return;
     
-    const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
     
     // Calcular la posición del cursor relativa al canvas
-    const x = e.clientX;
-    const y = e.clientY;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
     
     setIsDrawing(true);
     setLastPosition({ x, y });
@@ -122,22 +137,27 @@ const App = () => {
   
   // Función para dibujar
   const draw = (e) => {
-    if (!isDrawing || !canvasRef.current) return;
+    if (!isDrawing) return;
     
-    const canvas = canvasRef.current;
+    const canvas = showDrawingCanvas ? blankCanvasRef.current : canvasRef.current;
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
+    const rect = canvas.getBoundingClientRect();
     
     // Calcular la posición del cursor relativa al canvas
-    const x = e.clientX;
-    const y = e.clientY;
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
     
-    // Si es modo láser, solo registrar la posición para la estela
     if (drawingTool === 'laser') {
+      // Para el puntero láser, solo registramos la posición para la estela
       setLaserTrail(prevTrail => [...prevTrail, { x, y }]);
-      // Limitar la longitud de la estela para evitar problemas de rendimiento
-      if (laserTrail.length > 20) {
-        setLaserTrail(prevTrail => prevTrail.slice(-20));
+      
+      // Limitar la longitud de la estela para que se desvanezca más rápido
+      if (laserTrail.length > 10) { 
+        setLaserTrail(prevTrail => prevTrail.slice(-10));
       }
+      
       setLastPosition({ x, y });
       return;
     }
@@ -160,79 +180,16 @@ const App = () => {
     ctx.stroke();
     
     setLastPosition({ x, y });
-    
-    // Agregar puntos a la estela del láser si corresponde
-    if (drawingTool === 'laser') {
-      setLaserTrail([...laserTrail, { x, y }]);
-    }
   };
-  
-  // Función para detener el dibujo
-  const stopDrawing = () => {
-    setIsDrawing(false);
-  };
-  
-  // Función para limpiar el canvas
-  const clearCanvas = () => {
-    if (!canvasRef.current) return;
-    
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Limpiar la estela del láser
-    setLaserTrail([]);
-  };
-  
-  // Efecto para configurar el canvas cuando se activa la herramienta de dibujo
-  useEffect(() => {
-    const handleScroll = () => {
-      clearCanvas();
-    };
-    
-    const handleResize = () => {
-      setupCanvas();
-    };
-    
-    if (showDrawingTool) {
-      setupCanvas();
-      window.addEventListener('scroll', handleScroll);
-      window.addEventListener('resize', handleResize);
-    }
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [showDrawingTool]);
-
-  // Efecto para manejar la estela del láser
-  useEffect(() => {
-    if (drawingTool === 'laser' && laserTrail.length > 0) {
-      // Crear un intervalo para ir desvaneciendo la estela
-      const fadeInterval = setInterval(() => {
-        setLaserTrail(prevTrail => {
-          // Eliminar el punto más antiguo de la estela
-          const newTrail = [...prevTrail];
-          newTrail.shift();
-          return newTrail;
-        });
-      }, 100); // Velocidad de desvanecimiento
-      
-      return () => {
-        clearInterval(fadeInterval);
-      };
-    }
-  }, [drawingTool, laserTrail]);
   
   // Función para dibujar la estela del láser
   const drawLaserTrail = useCallback(() => {
-    if (!canvasRef.current || laserTrail.length === 0) return;
+    const canvas = showDrawingCanvas ? blankCanvasRef.current : canvasRef.current;
+    if (!canvas || laserTrail.length === 0) return;
     
-    const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     
-    // Limpiar el canvas
+    // Limpiar el canvas para dibujar solo la estela
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Dibujar la estela con opacidad decreciente
@@ -256,20 +213,7 @@ const App = () => {
         ctx.fill();
       }
     });
-  }, [laserTrail, currentColor, lineWidth]);
-  
-  // Función para convertir color hex a rgb
-  const hexToRgb = (hex) => {
-    // Eliminar el # si existe
-    hex = hex.replace('#', '');
-    
-    // Convertir a valores RGB
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
-    
-    return `${r}, ${g}, ${b}`;
-  };
+  }, [laserTrail, currentColor, lineWidth, showDrawingCanvas]);
   
   // Efecto para dibujar la estela del láser
   useEffect(() => {
@@ -277,7 +221,66 @@ const App = () => {
       drawLaserTrail();
     }
   }, [drawingTool, laserTrail, drawLaserTrail]);
+  
+  // Función para detener el dibujo
+  const stopDrawing = () => {
+    setIsDrawing(false);
+  };
+  
+  // Función para limpiar el canvas
+  const clearCanvas = () => {
+    const canvas = showDrawingCanvas ? blankCanvasRef.current : canvasRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Limpiar también la estela del láser
+    setLaserTrail([]);
+  };
+  
+  // Efecto para configurar el canvas cuando se activa la herramienta de dibujo
+  useEffect(() => {
+    const handleScroll = () => {
+      clearCanvas();
+    };
+    
+    const handleResize = () => {
+      setupCanvas();
+    };
+    
+    if (showDrawingTool || showDrawingCanvas) {
+      setupCanvas();
+      window.addEventListener('scroll', handleScroll);
+      window.addEventListener('resize', handleResize);
+    }
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [showDrawingTool, showDrawingCanvas]);
 
+  // Efecto para manejar la estela del láser
+  useEffect(() => {
+    if (drawingTool === 'laser' && laserTrail.length > 0) {
+      // Crear un intervalo para ir desvaneciendo la estela
+      const fadeInterval = setInterval(() => {
+        setLaserTrail(prevTrail => {
+          if (prevTrail.length === 0) return prevTrail;
+          // Eliminar el punto más antiguo de la estela
+          const newTrail = [...prevTrail];
+          newTrail.shift();
+          return newTrail;
+        });
+      }, 50); // Reducido de 100 a 50 ms para que se desvanezca más rápido
+      
+      return () => {
+        clearInterval(fadeInterval);
+      };
+    }
+  }, [drawingTool, laserTrail]);
+  
   // Cálculos numerológicos
   const handleCalculate = () => {
     if (!day || !month || !year) {
@@ -918,149 +921,227 @@ const App = () => {
   const handleNumberSelect = (number, type) => {
     setSelectedNumber(number);
     setSelectedNumberType(type);
+    
+    // Generar el contenido para la ventana flotante
+    const infoContent = renderNumberInfoContent(number, type);
+    setFloatingNumberInfoContent(infoContent);
+    setIsNumberInfoOpen(true);
   };
 
   // Renderizar universo numérico
   const renderNumericalUniverse = () => {
     if (!numberResults) return null;
     
+    const goldStyle = {
+      backgroundColor: '#c1a875',
+      color: '#ffffff',
+      width: '60px',
+      height: '60px',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: '1.8rem',
+      fontWeight: 'bold',
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+    };
+    
+    const turquoiseStyle = {
+      backgroundColor: '#007a87',
+      color: '#ffffff',
+      width: '60px',
+      height: '60px',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: '1.8rem',
+      fontWeight: 'bold',
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+    };
+    
+    // Detectar si estamos en móvil (ancho < 768px)
+    const isMobile = window.innerWidth < 768;
+    
+    // Ajustar espaciado según dispositivo
+    const topRowGap = isMobile ? '1rem' : '2rem';
+    const middleRowGap = isMobile ? '2rem' : '6rem';
+    const bottomRowGap = isMobile ? '0.5rem' : '6rem'; 
+    const verticalGap = isMobile ? '1.5rem' : '2.5rem';
+    
     return (
-      <div className="numerical-universe">
-        <h3>Universo Numérico</h3>
-        <div className="universe-container">
-          {/* Fila 1: Propósito y Camino de Vida */}
-          <div className="universe-row">
-            <div className="universe-item">
-              <div 
-                className="number-cell gold-bg"
-                onClick={() => handleNumberSelect(numberResults.purposeNumber, 'purposeNumber')}
-              >
-                {reduceNumber(numberResults.purposeNumber)}
+      <CollapsibleSection title="Universo Numérico" initialOpen={true}>
+        <div className="numerical-universe">
+          <h3>Universo Numérico</h3>
+          <div className="universe-container" style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            gap: verticalGap, 
+            padding: '0 1rem' 
+          }}>
+            {/* Fila 1: Propósito y Camino de Vida */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: isMobile ? 'space-between' : 'space-around', 
+              width: '100%', 
+              maxWidth: isMobile ? '280px' : '600px', 
+              gap: topRowGap 
+            }}>
+              <div className="universe-item">
+                <div 
+                  style={goldStyle}
+                  onClick={() => handleNumberSelect(numberResults.purposeNumber, 'purposeNumber')}
+                >
+                  {reduceNumber(numberResults.purposeNumber)}
+                </div>
+                <span className="number-label">N° De Propósito</span>
               </div>
-              <span className="number-label">N° De Propósito</span>
+              
+              <div className="universe-item">
+                <div 
+                  style={turquoiseStyle}
+                  onClick={() => handleNumberSelect(numberResults.lifePathNumber, 'lifePathNumber')}
+                >
+                  {reduceNumber(numberResults.lifePathNumber)}
+                </div>
+                <span className="number-label">N° Camino De Vida</span>
+              </div>
             </div>
             
-            <div className="universe-item">
-              <div 
-                className="number-cell turquoise-bg"
-                onClick={() => handleNumberSelect(numberResults.lifePathNumber, 'lifePathNumber')}
-              >
-                {reduceNumber(numberResults.lifePathNumber)}
+            {/* Fila 2: Talento */}
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <div className="universe-item">
+                <div 
+                  style={turquoiseStyle}
+                  onClick={() => handleNumberSelect(numberResults.talentNumber, 'talentNumber')}
+                >
+                  {reduceNumber(numberResults.talentNumber)}
+                </div>
+                <span className="number-label">N° Talento</span>
               </div>
-              <span className="number-label">N° Camino De Vida</span>
-            </div>
-          </div>
-          
-          {/* Fila 2: Talento */}
-          <div className="universe-row">
-            <div className="universe-item">
-              <div 
-                className="number-cell turquoise-bg"
-                onClick={() => handleNumberSelect(numberResults.talentNumber, 'talentNumber')}
-              >
-                {reduceNumber(numberResults.talentNumber)}
-              </div>
-              <span className="number-label">N° Talento</span>
-            </div>
-          </div>
-          
-          {/* Fila 3: Emocional y Mental */}
-          <div className="universe-row">
-            <div className="universe-item">
-              <div 
-                className="number-cell gold-bg"
-                onClick={() => handleNumberSelect(reduceNumber(numberResults.emotionalNumber), 'emotionalNumber')}
-              >
-                {reduceNumber(numberResults.emotionalNumber)}
-              </div>
-              <span className="number-label">N° Emocional/Relaciones</span>
             </div>
             
-            <div className="universe-item">
-              <div 
-                className="number-cell gold-bg"
-                onClick={() => handleNumberSelect(reduceNumber(numberResults.mentalNumber), 'mentalNumber')}
-              >
-                {reduceNumber(numberResults.mentalNumber)}
+            {/* Fila 3: Emocional y Mental - Movidos hacia el interior */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              width: '100%', 
+              maxWidth: isMobile ? '180px' : '400px', 
+              gap: middleRowGap 
+            }}>
+              <div className="universe-item">
+                <div 
+                  style={goldStyle}
+                  onClick={() => handleNumberSelect(reduceNumber(numberResults.emotionalNumber), 'emotionalNumber')}
+                >
+                  {reduceNumber(numberResults.emotionalNumber)}
+                </div>
+                <span className="number-label">N° Emocional/Relaciones</span>
               </div>
-              <span className="number-label">N° Mental</span>
-            </div>
-          </div>
-          
-          {/* Fila 4: Femenino, Personal y Masculino */}
-          <div className="universe-row">
-            <div className="universe-item">
-              <div 
-                className="number-cell turquoise-bg"
-                onClick={() => handleNumberSelect(numberResults.feminineNumber, 'feminineNumber')}
-              >
-                {reduceNumber(numberResults.feminineNumber)}
+              
+              <div className="universe-item">
+                <div 
+                  style={goldStyle}
+                  onClick={() => handleNumberSelect(reduceNumber(numberResults.mentalNumber), 'mentalNumber')}
+                >
+                  {reduceNumber(numberResults.mentalNumber)}
+                </div>
+                <span className="number-label">N° Mental</span>
               </div>
-              <span className="number-label">N° Energía Femenina</span>
-            </div>
-            
-            <div className="universe-item">
-              <div 
-                className="number-cell turquoise-bg"
-                onClick={() => handleNumberSelect(numberResults.personalityNumber, 'personalityNumber')}
-              >
-                {reduceNumber(numberResults.personalityNumber)}
-              </div>
-              <span className="number-label">N° Personal</span>
             </div>
             
-            <div className="universe-item">
-              <div 
-                className="number-cell turquoise-bg"
-                onClick={() => handleNumberSelect(numberResults.masculineNumber, 'masculineNumber')}
-              >
-                {reduceNumber(numberResults.masculineNumber)}
+            {/* Fila 4: Femenino, Personal y Masculino */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: isMobile ? 'space-between' : 'space-around', 
+              width: '100%', 
+              maxWidth: isMobile ? '340px' : '600px', 
+              gap: topRowGap 
+            }}>
+              <div className="universe-item">
+                <div 
+                  style={turquoiseStyle}
+                  onClick={() => handleNumberSelect(numberResults.feminineNumber, 'feminineNumber')}
+                >
+                  {reduceNumber(numberResults.feminineNumber)}
+                </div>
+                <span className="number-label">N° Energía Femenina</span>
               </div>
-              <span className="number-label">N° Energía Masculina</span>
-            </div>
-          </div>
-          
-          {/* Fila 5: Trabajo y Energético */}
-          <div className="universe-row">
-            <div className="universe-item">
-              <div 
-                className="number-cell gold-bg"
-                onClick={() => handleNumberSelect(numberResults.workFamilyNumber, 'workFamilyNumber')}
-              >
-                {reduceNumber(numberResults.workFamilyNumber)}
+              
+              <div className="universe-item">
+                <div 
+                  style={turquoiseStyle}
+                  onClick={() => handleNumberSelect(numberResults.personalityNumber, 'personalityNumber')}
+                >
+                  {reduceNumber(numberResults.personalityNumber)}
+                </div>
+                <span className="number-label">N° Personal</span>
               </div>
-              <span className="number-label">N° Trabajo/Familia/Territorio</span>
+              
+              <div className="universe-item">
+                <div 
+                  style={turquoiseStyle}
+                  onClick={() => handleNumberSelect(numberResults.masculineNumber, 'masculineNumber')}
+                >
+                  {reduceNumber(numberResults.masculineNumber)}
+                </div>
+                <span className="number-label">N° Energía Masculina</span>
+              </div>
             </div>
             
-            <div className="universe-item">
-              <div 
-                className="number-cell gold-bg"
-                onClick={() => handleNumberSelect(numberResults.energeticNumber, 'energeticNumber')}
-              >
-                {reduceNumber(numberResults.energeticNumber)}
+            {/* Fila 5: Trabajo y Energético - Movidos hacia el interior */}
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              width: '100%', 
+              maxWidth: isMobile ? '90px' : '450px', 
+              gap: isMobile ? '0.5rem' : '6rem'
+            }}>
+              <div className="universe-item">
+                <div 
+                  style={goldStyle}
+                  onClick={() => handleNumberSelect(numberResults.workFamilyNumber, 'workFamilyNumber')}
+                >
+                  {reduceNumber(numberResults.workFamilyNumber)}
+                </div>
+                <span className="number-label">N° Trabajo/Familia/Territorio</span>
               </div>
-              <span className="number-label">N° Energético/Creativo/Sexual</span>
+              
+              <div className="universe-item">
+                <div 
+                  style={goldStyle}
+                  onClick={() => handleNumberSelect(numberResults.energeticNumber, 'energeticNumber')}
+                >
+                  {reduceNumber(numberResults.energeticNumber)}
+                </div>
+                <span className="number-label">N° Energético/Creativo/Sexual</span>
+              </div>
             </div>
-          </div>
-          
-          {/* Fila 6: Alma */}
-          <div className="universe-row">
-            <div className="universe-item">
-              <div 
-                className="number-cell turquoise-bg"
-                onClick={() => handleNumberSelect(numberResults.challengeNumber, 'challengeNumber')}
-              >
-                {reduceNumber(numberResults.challengeNumber)}
+            
+            {/* Fila 6: Reto */}
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <div className="universe-item">
+                <div 
+                  style={turquoiseStyle}
+                  onClick={() => handleNumberSelect(numberResults.challengeNumber, 'challengeNumber')}
+                >
+                  {reduceNumber(numberResults.challengeNumber)}
+                </div>
+                <span className="number-label">N° Reto</span>
               </div>
-              <span className="number-label">N° Reto</span>
             </div>
           </div>
         </div>
-      </div>
+      </CollapsibleSection>
     );
   };
 
-  // Función para renderizar un valor numérico en el universo numérico (siempre reducido a una cifra)
+  // Renderizar un valor numérico en el universo numérico (siempre reducido a una cifra)
   const renderUniverseNumber = (num) => {
     // Para el universo numérico, siempre reducimos a una cifra
     if (num === undefined || num === null) return '';
@@ -1129,8 +1210,12 @@ const App = () => {
   const renderIdealTable = () => {
     if (!numberResults || !numberResults.idealTable) return null;
     
+    // Detectar si estamos en móvil
+    const isMobile = window.innerWidth < 768;
+    
     // Extraer datos para la tabla
     const idealNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    
     const excessNumbers = idealNumbers.map(num => {
       const key = Object.keys(idealNumberMapping).find(k => idealNumberMapping[k] === num);
       return numberResults.idealTable[key]?.excess || 0;
@@ -1145,62 +1230,127 @@ const App = () => {
       return numberResults.idealTable[key]?.missing || 0;
     });
     
+    // Estilos para la tabla
+    const tableStyle = {
+      overflowX: 'auto',
+      padding: isMobile ? '1rem 0.5rem' : '1.5rem'
+    };
+    
+    const tableGridStyle = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '0.5rem',
+      maxWidth: '800px',
+      margin: '0 auto',
+      minWidth: isMobile ? '600px' : 'auto' // Ancho mínimo para mostrar todos los números en móvil
+    };
+    
+    const tableRowStyle = {
+      display: 'grid',
+      gridTemplateColumns: `${isMobile ? '80px' : '100px'} repeat(9, ${isMobile ? '40px' : '1fr'})`,
+      gap: isMobile ? '0.25rem' : '0.5rem',
+      alignItems: 'center'
+    };
+    
+    const tableLabelStyle = {
+      fontWeight: 'bold',
+      color: 'var(--color-turquoise)',
+      fontSize: isMobile ? '1.2rem' : '1.5rem',
+      textAlign: 'right',
+      paddingRight: '1rem'
+    };
+    
+    // Estilos para los números
+    const getNumberStyle = (type) => {
+      let baseStyle = {
+        width: isMobile ? '35px' : '62px',
+        height: isMobile ? '35px' : '62px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '50%',
+        fontWeight: 'bold',
+        margin: '0 auto',
+        fontSize: isMobile ? '1rem' : '1.5rem',
+        cursor: 'pointer'
+      };
+      
+      switch(type) {
+        case 'ideal':
+          return {...baseStyle, backgroundColor: '#F2E6D0', color: '#B5986D'};
+        case 'excess':
+          return {...baseStyle, backgroundColor: '#E0F2F4', color: '#0D7E8A'};
+        case 'real':
+          return {...baseStyle, backgroundColor: '#F2E6D0', color: '#B5986D'};
+        case 'missing':
+          return {...baseStyle, backgroundColor: '#E0F2F4', color: '#0D7E8A'};
+        default:
+          return baseStyle;
+      }
+    };
+    
     return (
-      <div className="ideal-table">
-        <h3>Tabla Ideal Numérica</h3>
-        <div className="ideal-table-grid">
-          <div className="table-row">
-            <div className="table-label">Ideal:</div>
-            {idealNumbers.map(num => (
-              <IdealTableNumber 
-                key={`ideal-${num}`} 
-                num={num} 
-                className="ideal-number clickable"
-                onClick={() => handleNumberSelect(num, 'idealNumber')}
-              />
-            ))}
-          </div>
-          
-          <div className="table-row">
-            <div className="table-label">Exceso:</div>
-            {excessNumbers.map((num, index) => (
-              <IdealTableNumber 
-                key={`excess-${index}`} 
-                num={num} 
-                className="excess-number clickable"
-                onClick={() => handleNumberSelect(num, 'excessNumber')}
-              />
-            ))}
-          </div>
-          
-          <div className="table-row">
-            <div className="table-label">Real:</div>
-            {realNumbers.map((num, index) => (
-              <IdealTableNumber 
-                key={`real-${index}`} 
-                num={num} 
-                className="real-number clickable"
-                onClick={() => {
-                  const key = Object.keys(idealNumberMapping).find(k => idealNumberMapping[k] === idealNumbers[index]);
-                  handleNumberSelect(num, key);
-                }}
-              />
-            ))}
-          </div>
-          
-          <div className="table-row">
-            <div className="table-label">Falta:</div>
-            {missingNumbers.map((num, index) => (
-              <IdealTableNumber 
-                key={`missing-${index}`} 
-                num={num} 
-                className="missing-number clickable"
-                onClick={() => handleNumberSelect(num, 'missingNumber')}
-              />
-            ))}
+      <CollapsibleSection title="Tabla Ideal Numérica" initialOpen={false}>
+        <div className="ideal-table" style={tableStyle}>
+          <h3>Tabla Ideal Numérica</h3>
+          <div style={tableGridStyle}>
+            <div style={tableRowStyle}>
+              <div style={tableLabelStyle}>Ideal:</div>
+              {idealNumbers.map(num => (
+                <div 
+                  key={`ideal-${num}`}
+                  style={getNumberStyle('ideal')}
+                  onClick={() => handleNumberSelect(num, 'idealNumber')}
+                >
+                  {num}
+                </div>
+              ))}
+            </div>
+            
+            <div style={tableRowStyle}>
+              <div style={tableLabelStyle}>Exceso:</div>
+              {excessNumbers.map((num, index) => (
+                <div 
+                  key={`excess-${index}`}
+                  style={getNumberStyle('excess')}
+                  onClick={() => handleNumberSelect(num, 'excessNumber')}
+                >
+                  {num}
+                </div>
+              ))}
+            </div>
+            
+            <div style={tableRowStyle}>
+              <div style={tableLabelStyle}>Real:</div>
+              {realNumbers.map((num, index) => (
+                <div 
+                  key={`real-${index}`}
+                  style={getNumberStyle('real')}
+                  onClick={() => {
+                    const key = Object.keys(idealNumberMapping).find(k => idealNumberMapping[k] === idealNumbers[index]);
+                    handleNumberSelect(num, key);
+                  }}
+                >
+                  {num}
+                </div>
+              ))}
+            </div>
+            
+            <div style={tableRowStyle}>
+              <div style={tableLabelStyle}>Falta:</div>
+              {missingNumbers.map((num, index) => (
+                <div 
+                  key={`missing-${index}`}
+                  style={getNumberStyle('missing')}
+                  onClick={() => handleNumberSelect(num, 'missingNumber')}
+                >
+                  {num}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsibleSection>
     );
   };
   
@@ -1209,70 +1359,72 @@ const App = () => {
     if (!numberResults || !numberResults.years) return null;
     
     return (
-      <div className="years-table-container">
-        <h3 className="table-title">Tabla de Energía Anual</h3>
-        <div className="years-table-grid">
-          {/* Primera fila: Fechas */}
-          <div className="table-header">Fecha</div>
-          <div className="table-cell" data-type="year">
-            {numberResults.years.previous.year}
-          </div>
-          <div className="table-cell current-year-column" data-type="year">
-            {numberResults.years.current.year}
-          </div>
-          <div className="table-cell" data-type="year">
-            {numberResults.years.next.year}
-          </div>
-          
-          {/* Segunda fila: Edades */}
-          <div className="table-header">Edad</div>
-          <div className="table-cell">
-            {renderNumberValue(numberResults.years.previous.age, 'age')}
-          </div>
-          <div className="table-cell current-year-column" data-type="age">
-            {renderNumberValue(numberResults.years.current.age, 'age')}
-          </div>
-          <div className="table-cell">
-            {renderNumberValue(numberResults.years.next.age, 'age')}
-          </div>
-          
-          {/* Tercera fila: Año General */}
-          <div className="table-header">Año<br/>General</div>
-          <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.previous.generalYear, 'generalYear')}>
-            {renderNumberValue(numberResults.years.previous.generalYear, 'generalYear')}
-          </div>
-          <div className="table-cell clickable current-year-column" data-type="number" onClick={() => handleNumberSelect(numberResults.years.current.generalYear, 'generalYear')}>
-            {renderNumberValue(numberResults.years.current.generalYear, 'generalYear')}
-          </div>
-          <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.next.generalYear, 'generalYear')}>
-            {renderNumberValue(numberResults.years.next.generalYear, 'generalYear')}
-          </div>
-          
-          {/* Cuarta fila: Año Personal */}
-          <div className="table-header">Año<br/>Personal</div>
-          <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.previous.personalYear, 'personalYear')}>
-            {renderNumberValue(numberResults.years.previous.personalYear, 'personalYear')}
-          </div>
-          <div className="table-cell clickable current-year-column" data-type="number" onClick={() => handleNumberSelect(numberResults.years.current.personalYear, 'personalYear')}>
-            {renderNumberValue(numberResults.years.current.personalYear, 'personalYear')}
-          </div>
-          <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.next.personalYear, 'personalYear')}>
-            {renderNumberValue(numberResults.years.next.personalYear, 'personalYear')}
-          </div>
-          
-          {/* Quinta fila: Año Vital */}
-          <div className="table-header">Año<br/>Vital</div>
-          <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.previous.vitalYear, 'vitalYear')}>
-            {renderNumberValue(numberResults.years.previous.vitalYear, 'vitalYear')}
-          </div>
-          <div className="table-cell clickable current-year-column" data-type="number" onClick={() => handleNumberSelect(numberResults.years.current.vitalYear, 'vitalYear')}>
-            {renderNumberValue(numberResults.years.current.vitalYear, 'vitalYear')}
-          </div>
-          <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.next.vitalYear, 'vitalYear')}>
-            {renderNumberValue(numberResults.years.next.vitalYear, 'vitalYear')}
+      <CollapsibleSection title="Tabla de Energía Anual" initialOpen={false}>
+        <div className="years-table-container">
+          <h3 className="table-title">Tabla de Energía Anual</h3>
+          <div className="years-table-grid">
+            {/* Primera fila: Fechas */}
+            <div className="table-header">Fecha</div>
+            <div className="table-cell" data-type="year">
+              {numberResults.years.previous.year}
+            </div>
+            <div className="table-cell current-year-column" data-type="year">
+              {numberResults.years.current.year}
+            </div>
+            <div className="table-cell" data-type="year">
+              {numberResults.years.next.year}
+            </div>
+            
+            {/* Segunda fila: Edades */}
+            <div className="table-header">Edad</div>
+            <div className="table-cell">
+              {renderNumberValue(numberResults.years.previous.age, 'age')}
+            </div>
+            <div className="table-cell current-year-column" data-type="age">
+              {renderNumberValue(numberResults.years.current.age, 'age')}
+            </div>
+            <div className="table-cell">
+              {renderNumberValue(numberResults.years.next.age, 'age')}
+            </div>
+            
+            {/* Tercera fila: Año General */}
+            <div className="table-header">Año<br/>General</div>
+            <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.previous.generalYear, 'generalYear')}>
+              {renderNumberValue(numberResults.years.previous.generalYear, 'generalYear')}
+            </div>
+            <div className="table-cell clickable current-year-column" data-type="number" onClick={() => handleNumberSelect(numberResults.years.current.generalYear, 'generalYear')}>
+              {renderNumberValue(numberResults.years.current.generalYear, 'generalYear')}
+            </div>
+            <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.next.generalYear, 'generalYear')}>
+              {renderNumberValue(numberResults.years.next.generalYear, 'generalYear')}
+            </div>
+            
+            {/* Cuarta fila: Año Personal */}
+            <div className="table-header">Año<br/>Personal</div>
+            <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.previous.personalYear, 'personalYear')}>
+              {renderNumberValue(numberResults.years.previous.personalYear, 'personalYear')}
+            </div>
+            <div className="table-cell clickable current-year-column" data-type="number" onClick={() => handleNumberSelect(numberResults.years.current.personalYear, 'personalYear')}>
+              {renderNumberValue(numberResults.years.current.personalYear, 'personalYear')}
+            </div>
+            <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.next.personalYear, 'personalYear')}>
+              {renderNumberValue(numberResults.years.next.personalYear, 'personalYear')}
+            </div>
+            
+            {/* Quinta fila: Año Vital */}
+            <div className="table-header">Año<br/>Vital</div>
+            <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.previous.vitalYear, 'vitalYear')}>
+              {renderNumberValue(numberResults.years.previous.vitalYear, 'vitalYear')}
+            </div>
+            <div className="table-cell clickable current-year-column" data-type="number" onClick={() => handleNumberSelect(numberResults.years.current.vitalYear, 'vitalYear')}>
+              {renderNumberValue(numberResults.years.current.vitalYear, 'vitalYear')}
+            </div>
+            <div className="table-cell clickable" data-type="number" onClick={() => handleNumberSelect(numberResults.years.next.vitalYear, 'vitalYear')}>
+              {renderNumberValue(numberResults.years.next.vitalYear, 'vitalYear')}
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsibleSection>
     );
   };
   
@@ -1281,81 +1433,93 @@ const App = () => {
     if (!numberResults || !numberResults.lifeStages) return null;
     
     return (
-      <div className="life-stages-table">
-        <h3 className="bold-title">Etapas Vitales</h3>
-        <div className="life-stages-container">
-          {/* Fila de etapas con círculos decorativos */}
-          <div className="life-stages-row">
-            <div className="life-stages-label">Etapas:</div>
-            {Object.entries(numberResults.lifeStages).map(([stage, data], index) => {
-              const stageNumber = parseInt(stage.replace('stage', ''));
-              const startAge = stageNumber === 1 ? 0 : numberResults.lifeStages[`stage${stageNumber - 1}`].endAge + 1;
-              const endAgeDisplay = data.endAge === null ? "<" : data.endAge;
-              
-              // Aplicar clase especial si es la etapa actual
-              const circleClass = data.isCurrent ? "current-stage-circle" : "stage-circle";
-              
-              return (
-                <div key={`stage-${stageNumber}`} className="life-stage-item">
-                  <div className={circleClass}>
-                    {startAge}/{endAgeDisplay}
+      <CollapsibleSection title="Etapas Vitales" initialOpen={false}>
+        <div className="life-stages-table">
+          <h3 className="bold-title">Etapas Vitales</h3>
+          <div className="life-stages-container">
+            {/* Fila de etapas con círculos decorativos */}
+            <div className="life-stages-row">
+              <div className="life-stages-label">Etapas:</div>
+              {Object.entries(numberResults.lifeStages).map(([stage, data], index) => {
+                const stageNumber = parseInt(stage.replace('stage', ''));
+                
+                // Determinar el rango de edad para cada etapa
+                let startAge = 0;
+                if (stageNumber > 1) {
+                  // Si no es la primera etapa, el inicio es el final de la etapa anterior + 1
+                  const prevStage = `stage${stageNumber - 1}`;
+                  startAge = numberResults.lifeStages[prevStage].endAge + 1;
+                }
+                
+                // Para la última etapa (stage4), mostrar "X<" en lugar de "X+"
+                const endAge = data.endAge === null ? "<" : data.endAge;
+                const ageRange = stageNumber === 4 ? `${startAge}${endAge}` : `${startAge}-${endAge}`;
+                
+                // Aplicar clase especial si es la etapa actual
+                const circleClass = data.isCurrent ? "current-stage-circle" : "stage-circle";
+                
+                return (
+                  <div key={`stage-${stageNumber}`} className="life-stage-item">
+                    <div className={circleClass}>
+                      {ageRange}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-          
-          {/* Fila de oportunidades */}
-          <div className="life-stages-row">
-            <div className="life-stages-label">Oportunidades:</div>
-            {Object.entries(numberResults.lifeStages).map(([stage, data], index) => {
-              const stageNumber = parseInt(stage.replace('stage', ''));
-              
-              return (
-                <div key={`opportunity-${stageNumber}`} className="life-stage-number">
-                  <div 
-                    className="opportunity-number"
-                    onClick={() => handleNumberSelect(reduceNumber(data.opportunities), `stage${stageNumber}Opportunity`)}
-                  >
-                    {reduceNumber(data.opportunities) === 2 && (
-                      // Primera etapa: comprobar si el número personal y el femenino suman 11
-                      (stageNumber === 1 && numberResults.personalityNumber + numberResults.feminineNumber === 11) ||
-                      // Segunda etapa: comprobar si el número personal y el masculino suman 11
-                      (stageNumber === 2 && numberResults.personalityNumber + numberResults.masculineNumber === 11) ||
-                      // Tercera etapa: comprobar si el número mental y el emocional suman 11
-                      (stageNumber === 3 && numberResults.mentalNumber + numberResults.emotionalNumber === 11) ||
-                      // Cuarta etapa: comprobar si el número femenino y el masculino suman 11
-                      (stageNumber === 4 && numberResults.feminineNumber + numberResults.masculineNumber === 11)
-                    ) ? "11/2" : reduceNumber(data.opportunities)}
+                );
+              })}
+            </div>
+            
+            {/* Fila de oportunidades */}
+            <div className="life-stages-row">
+              <div className="life-stages-label">Oportunidades:</div>
+              {Object.entries(numberResults.lifeStages).map(([stage, data], index) => {
+                const stageNumber = parseInt(stage.replace('stage', ''));
+                
+                return (
+                  <div key={`opportunity-${stageNumber}`} className="life-stage-number">
+                    <div 
+                      className="opportunity-number"
+                      onClick={() => handleNumberSelect(reduceNumber(data.opportunities), `stage${stageNumber}Opportunity`)}
+                    >
+                      {reduceNumber(data.opportunities) === 2 && (
+                        // Primera etapa: comprobar si el número personal y el femenino suman 11
+                        (stageNumber === 1 && numberResults.personalityNumber + numberResults.feminineNumber === 11) ||
+                        // Segunda etapa: comprobar si el número personal y el masculino suman 11
+                        (stageNumber === 2 && numberResults.personalityNumber + numberResults.masculineNumber === 11) ||
+                        // Tercera etapa: comprobar si el número mental y el emocional suman 11
+                        (stageNumber === 3 && numberResults.mentalNumber + numberResults.emotionalNumber === 11) ||
+                        // Cuarta etapa: comprobar si el número femenino y el masculino suman 11
+                        (stageNumber === 4 && numberResults.feminineNumber + numberResults.masculineNumber === 11)
+                      ) ? "11/2" : reduceNumber(data.opportunities)}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-          
-          {/* Línea divisoria */}
-          <div className="life-stages-divider"></div>
-          
-          {/* Fila de retos */}
-          <div className="life-stages-row">
-            <div className="life-stages-label">Retos:</div>
-            {Object.entries(numberResults.lifeStages).map(([stage, data], index) => {
-              const stageNumber = parseInt(stage.replace('stage', ''));
-              
-              return (
-                <div key={`challenge-${stageNumber}`} className="life-stage-number">
-                  <div 
-                    className="challenge-number"
-                    onClick={() => handleNumberSelect(reduceNumber(data.challenges), `stage${stageNumber}Challenge`)}
-                  >
-                    {reduceNumber(data.challenges)}
+                );
+              })}
+            </div>
+            
+            {/* Línea divisoria */}
+            <div className="life-stages-divider"></div>
+            
+            {/* Fila de retos */}
+            <div className="life-stages-row">
+              <div className="life-stages-label">Retos:</div>
+              {Object.entries(numberResults.lifeStages).map(([stage, data], index) => {
+                const stageNumber = parseInt(stage.replace('stage', ''));
+                
+                return (
+                  <div key={`challenge-${stageNumber}`} className="life-stage-number">
+                    <div 
+                      className="challenge-number"
+                      onClick={() => handleNumberSelect(reduceNumber(data.challenges), `stage${stageNumber}Challenge`)}
+                    >
+                      {reduceNumber(data.challenges)}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
+      </CollapsibleSection>
     );
   };
 
@@ -1513,70 +1677,72 @@ const App = () => {
     const masterNumbers = getMasterNumbersInProfile();
     
     return (
-      <div className="date-components-section">
-        <h3>Componentes de la Fecha</h3>
-        <div className="date-components-grid">
-          <div className="date-component">
-            <div className="date-component-label">Día:</div>
-            <div className={`date-component-value ${isMasterNumber(dayComponent) ? 'master-number' : ''}`} 
-                 onClick={() => isMasterNumber(dayComponent) && setSelectedNumber(dayComponent)}>
-              {dayComponent}
-            </div>
-          </div>
-          
-          <div className="date-component">
-            <div className="date-component-label">Mes:</div>
-            <div className={`date-component-value ${isMasterNumber(monthComponent) ? 'master-number' : ''}`}
-                 onClick={() => isMasterNumber(monthComponent) && setSelectedNumber(monthComponent)}>
-              {monthComponent}
-            </div>
-          </div>
-          
-          <div className="date-component">
-            <div className="date-component-label">Año:</div>
-            <div className={`date-component-value ${isMasterNumber(yearComponent) ? 'master-number' : ''}`}
-                 onClick={() => isMasterNumber(yearComponent) && setSelectedNumber(yearComponent)}>
-              {yearComponent}
-            </div>
-          </div>
-          
-          <div className="date-component">
-            <div className="date-component-label">Suma Total:</div>
-            <div className={`date-component-value ${isMasterNumber(totalDisplay) ? 'master-number' : ''}`}
-                 onClick={() => isMasterNumber(totalDisplay) && setSelectedNumber(totalDisplay)}>
-              {totalDisplay}
-            </div>
-          </div>
-        </div>
-        
-        {masterNumbers.length > 0 && (
-          <div className="hidden-master-numbers">
-            <details>
-              <summary>
-                <h4>Números Maestros Ocultos en la Fecha</h4>
-              </summary>
-              <div className="master-numbers-list">
-                {masterNumbers
-                  .filter(item => item.formula)
-                  .filter((item, index, self) => 
-                    index === self.findIndex(t => t.formula === item.formula)
-                  )
-                  .map((item, index) => (
-                    <div key={index} className="hidden-master-formula">
-                      <div className="formula">{item.formula}</div>
-                      <div 
-                        className={`master-number ${isMasterNumber(item.value) ? 'master-number' : ''}`}
-                        onClick={() => setSelectedNumber(item.value)}
-                      >
-                        {item.value}
-                      </div>
-                    </div>
-                  ))}
+      <CollapsibleSection title="Componentes de la Fecha" initialOpen={false}>
+        <div className="date-components-section">
+          <h3>Componentes de la Fecha</h3>
+          <div className="date-components-grid">
+            <div className="date-component">
+              <div className="date-component-label">Día:</div>
+              <div className={`date-component-value ${isMasterNumber(dayComponent) ? 'master-number' : ''}`} 
+                   onClick={() => isMasterNumber(dayComponent) && setSelectedNumber(dayComponent)}>
+                {dayComponent}
               </div>
-            </details>
+            </div>
+            
+            <div className="date-component">
+              <div className="date-component-label">Mes:</div>
+              <div className={`date-component-value ${isMasterNumber(monthComponent) ? 'master-number' : ''}`}
+                   onClick={() => isMasterNumber(monthComponent) && setSelectedNumber(monthComponent)}>
+                {monthComponent}
+              </div>
+            </div>
+            
+            <div className="date-component">
+              <div className="date-component-label">Año:</div>
+              <div className={`date-component-value ${isMasterNumber(yearComponent) ? 'master-number' : ''}`}
+                   onClick={() => isMasterNumber(yearComponent) && setSelectedNumber(yearComponent)}>
+                {yearComponent}
+              </div>
+            </div>
+            
+            <div className="date-component">
+              <div className="date-component-label">Suma<br/>Total:</div>
+              <div className={`date-component-value ${isMasterNumber(totalDisplay) ? 'master-number' : ''}`}
+                   onClick={() => isMasterNumber(totalDisplay) && setSelectedNumber(totalDisplay)}>
+                {totalDisplay}
+              </div>
+            </div>
           </div>
-        )}
-      </div>
+          
+          {masterNumbers.length > 0 && (
+            <div className="hidden-master-numbers">
+              <details>
+                <summary>
+                  <h4>Números Maestros Ocultos en la Fecha</h4>
+                </summary>
+                <div className="master-numbers-list">
+                  {masterNumbers
+                    .filter(item => item.formula)
+                    .filter((item, index, self) => 
+                      index === self.findIndex(t => t.formula === item.formula)
+                    )
+                    .map((item, index) => (
+                      <div key={index} className="hidden-master-formula">
+                        <div className="formula">{item.formula}</div>
+                        <div 
+                          className={`master-number ${isMasterNumber(item.value) ? 'master-number' : ''}`}
+                          onClick={() => setSelectedNumber(item.value)}
+                        >
+                          {item.value}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </details>
+            </div>
+          )}
+        </div>
+      </CollapsibleSection>
     );
   };
 
@@ -1654,10 +1820,9 @@ const App = () => {
 
   // Cargar fechas recientes desde localStorage al iniciar
   useEffect(() => {
-    const savedDates = localStorage.getItem('recentDates');
-    if (savedDates) {
-      setRecentDates(JSON.parse(savedDates));
-    }
+    // Limpiar el localStorage para resolver el problema de formato
+    localStorage.removeItem('recentDates');
+    setRecentDates([]);
   }, []);
 
   // Obtener nombre descriptivo del tipo de número
@@ -1704,6 +1869,211 @@ const App = () => {
   // Función para manejar el scroll
   const handleScroll = () => {
     setScrollPosition(window.scrollY);
+  };
+
+  // Función para alternar el canvas de dibujo en blanco
+  const toggleDrawingCanvas = () => {
+    const newState = !showDrawingCanvas;
+    setShowDrawingCanvas(newState);
+    
+    if (newState) {
+      // Al activar, configuramos el canvas en el siguiente ciclo de renderizado
+      setTimeout(() => {
+        setupCanvas();
+      }, 0);
+      
+      // Mostrar los controles de dibujo si no están visibles
+      if (!showDrawingTool) {
+        setShowDrawingTool(true);
+      }
+    }
+  };
+
+  // Función para cambiar la herramienta de dibujo
+  const changeDrawingTool = (tool) => {
+    setDrawingTool(tool);
+    
+    // Si cambiamos a láser, limpiar el canvas para empezar con una estela nueva
+    if (tool === 'laser') {
+      setLaserTrail([]);
+    }
+    
+    // Actualizar el canvas con la nueva configuración
+    setTimeout(() => {
+      setupCanvas();
+    }, 0);
+  };
+
+  // Función para convertir color hex a rgb
+  const hexToRgb = (hex) => {
+    // Eliminar el # si existe
+    hex = hex.replace('#', '');
+    
+    // Convertir a valores RGB
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    
+    return `${r}, ${g}, ${b}`;
+  };
+
+  // Función para cambiar el color
+  const handleColorChange = (color) => {
+    setCurrentColor(color);
+    // Cerrar el selector de color automáticamente después de seleccionar un color
+    setShowColorPicker(false);
+  };
+
+  // Función para cerrar la ventana flotante de información
+  const closeFloatingNumberInfo = () => {
+    setIsNumberInfoOpen(false);
+    setFloatingNumberInfoContent(null);
+  };
+
+  // Función para renderizar el contenido de la información del número para la ventana flotante
+  const renderNumberInfoContent = (number, type) => {
+    if (!number && number !== 0) {
+      return <p>No hay información de este número.</p>;
+    }
+
+    const info = numerologyInfo[number];
+    if (!info) {
+      return <p>No hay información definida en numerologyInfo para {number}.</p>;
+    }
+
+    return (
+      <div className="number-info">
+        <h3>
+          {getNumberTypeName(type)}: {number}
+        </h3>
+        
+        {info.centro && (
+          <div className="info-section">
+            <h4>Centro</h4>
+            <p>{info.centro}</p>
+          </div>
+        )}
+        
+        {info.reto && (
+          <div className="info-section">
+            <h4>Reto</h4>
+            <p>{info.reto}</p>
+          </div>
+        )}
+        
+        {info.arquetipo && (
+          <div className="info-section">
+            <h4>Arquetipo</h4>
+            <p>{info.arquetipo}</p>
+          </div>
+        )}
+        
+        {info.energia && (
+          <div className="info-section">
+            <h4>Energía</h4>
+            <p>{info.energia}</p>
+          </div>
+        )}
+        
+        {info.aprendizaje && (
+          <div className="info-section">
+            <h4>Aprendizaje</h4>
+            <p>{info.aprendizaje}</p>
+          </div>
+        )}
+        
+        {info.edad && (
+          <div className="info-section">
+            <h4>Edad</h4>
+            <p>{info.edad}</p>
+          </div>
+        )}
+        
+        {info.talentos && (
+          <div className="info-section">
+            <h4>Talentos</h4>
+            <p>{info.talentos}</p>
+          </div>
+        )}
+        
+        {info.caminoDeVida && (
+          <div className="info-section">
+            <h4>Camino de Vida</h4>
+            <p>{info.caminoDeVida}</p>
+          </div>
+        )}
+        
+        {info.proposito && (
+          <div className="info-section">
+            <h4>Propósito</h4>
+            <p>{info.proposito}</p>
+          </div>
+        )}
+        
+        {info.mental && (
+          <div className="info-section">
+            <h4>Mental</h4>
+            <p>{info.mental}</p>
+          </div>
+        )}
+        
+        {info.emocionalRelaciones && (
+          <div className="info-section">
+            <h4>Emocional/Relaciones</h4>
+            <p>{info.emocionalRelaciones}</p>
+          </div>
+        )}
+        
+        {info.trabajo && (
+          <div className="info-section">
+            <h4>Trabajo</h4>
+            <p>{info.trabajo}</p>
+          </div>
+        )}
+        
+        {info.familia && (
+          <div className="info-section">
+            <h4>Familia</h4>
+            <p>{info.familia}</p>
+          </div>
+        )}
+        
+        {info.territorio && (
+          <div className="info-section">
+            <h4>Territorio</h4>
+            <p>{info.territorio}</p>
+          </div>
+        )}
+        
+        {info.energetico && (
+          <div className="info-section">
+            <h4>Energético</h4>
+            <p>{info.energetico}</p>
+          </div>
+        )}
+        
+        {info.creativo && (
+          <div className="info-section">
+            <h4>Creativo</h4>
+            <p>{info.creativo}</p>
+          </div>
+        )}
+        
+        {info.sexual && (
+          <div className="info-section">
+            <h4>Sexual</h4>
+            <p>{info.sexual}</p>
+          </div>
+        )}
+        
+        {info.conclusion && (
+          <div className="info-section">
+            <h4>Conclusión</h4>
+            <p>{info.conclusion}</p>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -1779,14 +2149,32 @@ const App = () => {
                     key={index}
                     className="date-history-item"
                     onClick={() => {
-                      const [d, m, y] = date.split('/');
-                      setDay(d);
-                      setMonth(m);
-                      setYear(y);
-                      setSelectedDate(new Date(`${y}-${m}-${d}`));
+                      try {
+                        // Verificar si date es un string o un objeto Date
+                        let d, m, y;
+                        if (typeof date === 'string') {
+                          [d, m, y] = date.split('/');
+                        } else if (date instanceof Date) {
+                          d = date.getDate().toString().padStart(2, '0');
+                          m = (date.getMonth() + 1).toString().padStart(2, '0');
+                          y = date.getFullYear().toString();
+                        } else {
+                          console.error("Formato de fecha no reconocido:", date);
+                          return;
+                        }
+                        
+                        setDay(d);
+                        setMonth(m);
+                        setYear(y);
+                        setSelectedDate(new Date(`${y}-${m}-${d}`));
+                      } catch (error) {
+                        console.error("Error al procesar la fecha:", error, date);
+                      }
                     }}
                   >
-                    {date}
+                    {typeof date === 'string' ? date : date instanceof Date ? 
+                      `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}` : 
+                      'Fecha inválida'}
                   </button>
                 ))}
               </div>
@@ -1798,48 +2186,53 @@ const App = () => {
           </button>
           
           {numberResults && (
-            <div className="detailed-results">
-              <div className="result-item">
-                <span className="result-label">Edad:</span>
-                {renderNumberValue(numberResults.age, 'age')}
-              </div>
-              <div className="result-item">
-                <span className="result-label">N° Propósito:</span>
-                {renderNumberValue(numberResults.purposeNumber, 'purposeNumber')}
-              </div>
-              <div className="result-item">
-                <span className="result-label">N° Camino De Vida:</span>
-                {renderNumberValue(numberResults.lifePathNumber, 'lifePathNumber')}
-              </div>
-              <div className="result-item">
-                <span className="result-label">N° Mental:</span>
-                {renderNumberValue(numberResults.mentalNumber, 'mentalNumber')}
-              </div>
-              <div className="result-item">
-                <span className="result-label">N° Emocional Relaciones:</span>
-                {renderNumberValue(numberResults.emotionalNumber, 'emotionalNumber')}
-              </div>
-              <div className="result-item">
-                <span className="result-label">N° Trabajo Familia Territorio:</span>
-                {renderNumberValue(numberResults.workFamilyNumber, 'workFamilyNumber')}
-              </div>
-              <div className="result-item">
-                <span className="result-label">N° Energético Creativo Sexual:</span>
-                {renderNumberValue(numberResults.energeticNumber, 'energeticNumber')}
-              </div>
-              <div className="result-item">
-                <span className="result-label">N° Energía Masculina:</span>
-                {renderNumberValue(numberResults.masculineNumber, 'masculineNumber')}
-              </div>
-              <div className="result-item">
-                <span className="result-label">N° Personalidad:</span>
-                {renderNumberValue(numberResults.personalityNumber, 'personalityNumber')}
-              </div>
-              <div className="result-item">
-                <span className="result-label">N° Energía Femenina:</span>
-                {renderNumberValue(numberResults.feminineNumber, 'feminineNumber')}
-              </div>
-            </div>
+            <>
+              <div className="spacing-after-button"></div>
+              <CollapsibleSection title="Resumen Numérico" initialOpen={false}>
+                <div className="detailed-results">
+                  <div className="result-item">
+                    <span className="result-label">Edad:</span>
+                    {renderNumberValue(numberResults.age, 'age')}
+                  </div>
+                  <div className="result-item">
+                    <span className="result-label">N° Propósito:</span>
+                    {renderNumberValue(numberResults.purposeNumber, 'purposeNumber')}
+                  </div>
+                  <div className="result-item">
+                    <span className="result-label">N° Camino De Vida:</span>
+                    {renderNumberValue(numberResults.lifePathNumber, 'lifePathNumber')}
+                  </div>
+                  <div className="result-item">
+                    <span className="result-label">N° Mental:</span>
+                    {renderNumberValue(numberResults.mentalNumber, 'mentalNumber')}
+                  </div>
+                  <div className="result-item">
+                    <span className="result-label">N° Emocional Relaciones:</span>
+                    {renderNumberValue(numberResults.emotionalNumber, 'emotionalNumber')}
+                  </div>
+                  <div className="result-item">
+                    <span className="result-label">N° Trabajo Familia Territorio:</span>
+                    {renderNumberValue(numberResults.workFamilyNumber, 'workFamilyNumber')}
+                  </div>
+                  <div className="result-item">
+                    <span className="result-label">N° Energético Creativo Sexual:</span>
+                    {renderNumberValue(numberResults.energeticNumber, 'energeticNumber')}
+                  </div>
+                  <div className="result-item">
+                    <span className="result-label">N° Energía Masculina:</span>
+                    {renderNumberValue(numberResults.masculineNumber, 'masculineNumber')}
+                  </div>
+                  <div className="result-item">
+                    <span className="result-label">N° Personalidad:</span>
+                    {renderNumberValue(numberResults.personalityNumber, 'personalityNumber')}
+                  </div>
+                  <div className="result-item">
+                    <span className="result-label">N° Energía Femenina:</span>
+                    {renderNumberValue(numberResults.feminineNumber, 'feminineNumber')}
+                  </div>
+                </div>
+              </CollapsibleSection>
+            </>
           )}
         </section>
         
@@ -1866,7 +2259,7 @@ const App = () => {
             </div>
             
             {/* Canvas para dibujar */}
-            {showDrawingTool && (
+            {(showDrawingTool || showDrawingCanvas) && (
               <div className="floating-drawing-tool">
                 <canvas
                   ref={canvasRef}
@@ -1890,13 +2283,21 @@ const App = () => {
         {showDrawingTool ? <X size={24} /> : <PenLine size={24} />}
       </button>
       
+      {/* Ventana flotante para información de números */}
+      {isNumberInfoOpen && (
+        <FloatingNumberInfo 
+          content={floatingNumberInfoContent}
+          onClose={closeFloatingNumberInfo}
+        />
+      )}
+      
       {/* Controles de dibujo */}
-      {showDrawingTool && (
+      {(showDrawingTool || showDrawingCanvas) && (
         <>
-          <div className="floating-drawing-controls">
+          <div className={`floating-drawing-controls ${showDrawingCanvas ? 'in-blank-canvas' : ''}`}>
             <button
               className={`drawing-btn ${drawingTool === 'pen' ? 'active' : ''}`}
-              onClick={() => setDrawingTool('pen')}
+              onClick={() => changeDrawingTool('pen')}
               title="Lápiz"
             >
               <PenLine size={28} />
@@ -1904,7 +2305,7 @@ const App = () => {
             
             <button
               className={`drawing-btn ${drawingTool === 'eraser' ? 'active' : ''}`}
-              onClick={() => setDrawingTool('eraser')}
+              onClick={() => changeDrawingTool('eraser')}
               title="Borrador"
             >
               <Eraser size={28} />
@@ -1912,7 +2313,7 @@ const App = () => {
             
             <button
               className={`drawing-btn ${drawingTool === 'laser' ? 'active' : ''}`}
-              onClick={() => setDrawingTool('laser')}
+              onClick={() => changeDrawingTool('laser')}
               title="Puntero láser"
             >
               <span className="laser-icon">●</span>
@@ -1922,9 +2323,9 @@ const App = () => {
               className="drawing-btn"
               onClick={() => setShowColorPicker(!showColorPicker)}
               title="Cambiar color"
-              style={{ backgroundColor: currentColor }}
+              style={{ backgroundColor: 'var(--color-turquoise-light)' }}
             >
-              <Palette size={28} color="#fff" />
+              <div className="color-indicator" style={{ backgroundColor: currentColor }}></div>
             </button>
             
             <button
@@ -1943,6 +2344,16 @@ const App = () => {
               <RotateCcw size={28} />
             </button>
             
+            {!showDrawingCanvas && (
+              <button
+                className="drawing-btn"
+                onClick={toggleDrawingCanvas}
+                title="Zona de dibujo en blanco"
+              >
+                <Square size={28} />
+              </button>
+            )}
+            
             <button
               className="drawing-btn close-btn"
               onClick={toggleDrawingTool}
@@ -1955,40 +2366,40 @@ const App = () => {
           {showColorPicker && (
             <div className="floating-color-picker">
               <div
-                className={`color-option ${currentColor === '#000000' ? 'active' : ''}`}
-                style={{ backgroundColor: '#000000' }}
-                onClick={() => setCurrentColor('#000000')}
-                title="Negro"
+                className={`color-option ${currentColor === '#4D96FF' ? 'active' : ''}`}
+                style={{ backgroundColor: '#4D96FF' }}
+                onClick={() => handleColorChange('#4D96FF')}
+                title="Azul"
               ></div>
               <div
                 className={`color-option ${currentColor === '#FF6B6B' ? 'active' : ''}`}
                 style={{ backgroundColor: '#FF6B6B' }}
-                onClick={() => setCurrentColor('#FF6B6B')}
+                onClick={() => handleColorChange('#FF6B6B')}
                 title="Rojo"
-              ></div>
-              <div
-                className={`color-option ${currentColor === '#4D96FF' ? 'active' : ''}`}
-                style={{ backgroundColor: '#4D96FF' }}
-                onClick={() => setCurrentColor('#4D96FF')}
-                title="Azul"
               ></div>
               <div
                 className={`color-option ${currentColor === '#5BBFB5' ? 'active' : ''}`}
                 style={{ backgroundColor: '#5BBFB5' }}
-                onClick={() => setCurrentColor('#5BBFB5')}
+                onClick={() => handleColorChange('#5BBFB5')}
                 title="Turquesa"
               ></div>
               <div
                 className={`color-option ${currentColor === '#E6B54A' ? 'active' : ''}`}
                 style={{ backgroundColor: '#E6B54A' }}
-                onClick={() => setCurrentColor('#E6B54A')}
+                onClick={() => handleColorChange('#E6B54A')}
                 title="Dorado"
               ></div>
               <div
                 className={`color-option ${currentColor === '#9C6ADE' ? 'active' : ''}`}
                 style={{ backgroundColor: '#9C6ADE' }}
-                onClick={() => setCurrentColor('#9C6ADE')}
+                onClick={() => handleColorChange('#9C6ADE')}
                 title="Púrpura"
+              ></div>
+              <div
+                className={`color-option ${currentColor === '#000000' ? 'active' : ''}`}
+                style={{ backgroundColor: '#000000' }}
+                onClick={() => handleColorChange('#000000')}
+                title="Negro"
               ></div>
             </div>
           )}
@@ -2033,6 +2444,167 @@ const App = () => {
             </div>
           )}
         </>
+      )}
+      
+      {/* Canvas para dibujo en blanco */}
+      {showDrawingCanvas && (
+        <div className="drawing-canvas-overlay">
+          <div className="drawing-canvas-container">
+            <div className="drawing-canvas-header">
+              <h3>Zona de dibujo</h3>
+              <button className="close-canvas-btn" onClick={toggleDrawingCanvas}>
+                <X size={24} />
+              </button>
+            </div>
+            <div className="drawing-canvas-content">
+              <canvas
+                ref={blankCanvasRef}
+                className="blank-drawing-canvas"
+                onMouseDown={startDrawing}
+                onMouseMove={draw}
+                onMouseUp={stopDrawing}
+                onMouseLeave={stopDrawing}
+              />
+              
+              {/* Controles específicos para la ventana de dibujo en blanco */}
+              <div className="blank-canvas-controls">
+                <button
+                  className={`drawing-btn ${drawingTool === 'pen' ? 'active' : ''}`}
+                  onClick={() => changeDrawingTool('pen')}
+                  title="Lápiz"
+                >
+                  <PenLine size={28} />
+                </button>
+                
+                <button
+                  className={`drawing-btn ${drawingTool === 'eraser' ? 'active' : ''}`}
+                  onClick={() => changeDrawingTool('eraser')}
+                  title="Borrador"
+                >
+                  <Eraser size={28} />
+                </button>
+                
+                <button
+                  className={`drawing-btn ${drawingTool === 'laser' ? 'active' : ''}`}
+                  onClick={() => changeDrawingTool('laser')}
+                  title="Puntero láser"
+                >
+                  <span className="laser-icon">●</span>
+                </button>
+                
+                <button
+                  className="drawing-btn"
+                  onClick={() => setShowColorPicker(!showColorPicker)}
+                  title="Cambiar color"
+                  style={{ backgroundColor: 'var(--color-turquoise-light)' }}
+                >
+                  <div className="color-indicator" style={{ backgroundColor: currentColor }}></div>
+                </button>
+                
+                <button
+                  className="drawing-btn"
+                  onClick={() => setShowLineWidthPicker(!showLineWidthPicker)}
+                  title="Cambiar grosor"
+                >
+                  <PenLine size={28} />
+                </button>
+                
+                <button
+                  className="drawing-btn"
+                  onClick={clearCanvas}
+                  title="Limpiar todo"
+                >
+                  <RotateCcw size={28} />
+                </button>
+              </div>
+              
+              {/* Selector de color dentro de la ventana */}
+              {showColorPicker && (
+                <div className="blank-canvas-color-picker">
+                  <div className="color-options">
+                    <div 
+                      className="color-option" 
+                      style={{ backgroundColor: '#4D96FF' }} 
+                      onClick={() => handleColorChange('#4D96FF')}
+                      title="Azul"
+                    ></div>
+                    <div 
+                      className="color-option" 
+                      style={{ backgroundColor: '#FF6B6B' }} 
+                      onClick={() => handleColorChange('#FF6B6B')}
+                      title="Rojo"
+                    ></div>
+                    <div 
+                      className="color-option" 
+                      style={{ backgroundColor: '#5BBFB5' }} 
+                      onClick={() => handleColorChange('#5BBFB5')}
+                      title="Turquesa"
+                    ></div>
+                    <div 
+                      className="color-option" 
+                      style={{ backgroundColor: '#E6B54A' }} 
+                      onClick={() => handleColorChange('#E6B54A')}
+                      title="Dorado"
+                    ></div>
+                    <div 
+                      className="color-option" 
+                      style={{ backgroundColor: '#9C6ADE' }} 
+                      onClick={() => handleColorChange('#9C6ADE')}
+                      title="Púrpura"
+                    ></div>
+                    <div 
+                      className="color-option" 
+                      style={{ backgroundColor: '#000000' }} 
+                      onClick={() => handleColorChange('#000000')}
+                      title="Negro"
+                    ></div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Selector de grosor dentro de la ventana */}
+              {showLineWidthPicker && (
+                <div className="blank-canvas-line-width-picker">
+                  <div
+                    className={`line-width-option ${lineWidth === 1 ? 'active' : ''}`}
+                    onClick={() => setLineWidth(1)}
+                    title="Muy fino"
+                  >
+                    <div className="line-width-preview" style={{ width: 1 }}></div>
+                  </div>
+                  <div
+                    className={`line-width-option ${lineWidth === 2 ? 'active' : ''}`}
+                    onClick={() => setLineWidth(2)}
+                    title="Fino"
+                  >
+                    <div className="line-width-preview" style={{ width: 2 }}></div>
+                  </div>
+                  <div
+                    className={`line-width-option ${lineWidth === 4 ? 'active' : ''}`}
+                    onClick={() => setLineWidth(4)}
+                    title="Normal"
+                  >
+                    <div className="line-width-preview" style={{ width: 4 }}></div>
+                  </div>
+                  <div
+                    className={`line-width-option ${lineWidth === 6 ? 'active' : ''}`}
+                    onClick={() => setLineWidth(6)}
+                    title="Grueso"
+                  >
+                    <div className="line-width-preview" style={{ width: 6 }}></div>
+                  </div>
+                  <div
+                    className={`line-width-option ${lineWidth === 8 ? 'active' : ''}`}
+                    onClick={() => setLineWidth(8)}
+                    title="Muy grueso"
+                  >
+                    <div className="line-width-preview" style={{ width: 8 }}></div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -1,0 +1,97 @@
+/* responsive.css */
+
+@media (max-width: 1200px) {
+  .app {
+    padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 992px) {
+  .results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .years-table {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .app {
+    padding: var(--spacing-sm);
+  }
+  
+  .header h1 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .date-inputs {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .number-circles {
+    gap: var(--spacing-sm);
+  }
+  
+  .number-circle {
+    width: 55px;
+    height: 55px;
+    font-size: var(--font-size-md);
+  }
+  
+  .grid-number {
+    width: 50px;
+    height: 50px;
+    font-size: var(--font-size-md);
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .drawing-tools {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .years-table {
+    grid-template-columns: 1fr;
+  }
+  
+  .number-circles {
+    gap: var(--spacing-xs);
+  }
+  
+  .number-circle {
+    width: 45px;
+    height: 45px;
+    font-size: var(--font-size-sm);
+  }
+  
+  .grid-number {
+    width: 40px;
+    height: 40px;
+    font-size: var(--font-size-sm);
+  }
+  
+  .calculator-title,
+  .results-title,
+  .universe-title {
+    font-size: var(--font-size-lg);
+  }
+  
+  .section-title {
+    font-size: var(--font-size-md);
+  }
+  
+  .opportunity-number,
+  .challenge-number {
+    font-size: 1.4rem;
+  }
+}

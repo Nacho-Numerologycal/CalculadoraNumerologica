@@ -1,0 +1,21 @@
+/* main.css */
+
+@import "./variables.css";
+@import "./base.css";
+@import "./layout.css";
+
+/* Component Styles */
+@import "./components/collapsible-section.css";
+@import "./components/floating-number-info.css";
+@import "./components/drawing-tool.css";
+@import "./components/numbers.css";
+
+@import 'components/header.css';
+@import 'components/footer.css';
+@import 'components/calculator.css';
+@import 'components/input-section.css';
+@import 'components/results-section.css';
+@import 'components/number-grid.css';
+@import 'components/universe-numerical.css';
+@import 'components/tables.css';
+@import 'components/responsive.css';

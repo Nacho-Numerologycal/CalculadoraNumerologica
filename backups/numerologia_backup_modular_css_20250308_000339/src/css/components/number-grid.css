@@ -1,0 +1,47 @@
+/* number-grid.css */
+
+.number-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.grid-number {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--border-radius-circle);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.grid-number.regular {
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+}
+
+.grid-number.master {
+  background-color: var(--color-gold-light);
+  color: var(--color-gold-dark);
+}
+
+.grid-number:hover {
+  transform: scale(1.1);
+  box-shadow: var(--box-shadow);
+}
+
+.grid-number.active {
+  transform: scale(1.1);
+  box-shadow: var(--box-shadow);
+  border: 2px solid var(--color-turquoise);
+}
+
+.grid-number.master.active {
+  border: 2px solid var(--color-gold);
+}

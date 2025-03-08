@@ -1,0 +1,108 @@
+/* Correcciones específicas para el Universo Numérico en dispositivos móviles */
+
+/* Aseguramos que se mantenga la estructura orgánica en todos los dispositivos */
+@media (max-width: 768px) {
+  .number-universe-layout {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.5rem 0 !important;
+    gap: 1.2rem !important;
+  }
+  
+  .number-universe-row {
+    gap: 1.5rem !important;
+    width: 100% !important;
+  }
+  
+  .number-universe-cell {
+    max-width: 120px !important;
+  }
+  
+  .number-universe-item {
+    gap: 0.5rem !important;
+  }
+  
+  .number-universe-circle {
+    width: clamp(55px, 14vw, 70px) !important;
+    height: clamp(55px, 14vw, 70px) !important;
+    font-size: clamp(1.4rem, 4.5vw, 2.2rem) !important;
+  }
+  
+  .number-universe-label {
+    font-size: clamp(0.7rem, 1.8vw, 0.85rem) !important;
+    max-width: 100px !important;
+  }
+  
+  /* Ajustes para la sección desplegable */
+  .collapsible-content {
+    padding: 0.8rem 0.5rem !important;
+  }
+}
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 576px) {
+  .number-universe-layout {
+    gap: 1rem !important;
+    padding: 0.3rem 0 !important;
+  }
+  
+  .number-universe-row {
+    gap: 1rem !important;
+  }
+  
+  .number-universe-cell {
+    max-width: 100px !important;
+  }
+  
+  .number-universe-item {
+    gap: 0.4rem !important;
+  }
+  
+  .number-universe-circle {
+    width: clamp(50px, 15vw, 65px) !important;
+    height: clamp(50px, 15vw, 65px) !important;
+    font-size: clamp(1.3rem, 4vw, 2rem) !important;
+    border-width: 1.5px !important;
+  }
+  
+  .number-universe-circle.master-number {
+    border-width: 2px !important;
+  }
+  
+  .number-universe-label {
+    font-size: clamp(0.68rem, 1.7vw, 0.8rem) !important;
+    max-width: 90px !important;
+  }
+}
+
+/* Ajustes para dispositivos muy pequeños */
+@media (max-width: 380px) {
+  .number-universe-layout {
+    gap: 0.8rem !important;
+    padding: 0.2rem 0 !important;
+  }
+  
+  .number-universe-row {
+    gap: 0.8rem !important;
+  }
+  
+  .number-universe-cell {
+    max-width: 85px !important;
+  }
+  
+  .number-universe-item {
+    gap: 0.3rem !important;
+  }
+  
+  .number-universe-circle {
+    width: clamp(45px, 16vw, 55px) !important;
+    height: clamp(45px, 16vw, 55px) !important;
+    font-size: clamp(1.2rem, 3.8vw, 1.8rem) !important;
+    border-width: 1.5px !important;
+  }
+  
+  .number-universe-label {
+    font-size: clamp(0.65rem, 1.6vw, 0.78rem) !important;
+    max-width: 85px !important;
+  }
+}

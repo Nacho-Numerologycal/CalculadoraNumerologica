@@ -1,0 +1,976 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Calculator, X, PenLine, Eraser, RotateCcw, Palette } from 'lucide-react';
+import './App.css';
+import { 
+  numerologyInfo, 
+  reduceNumber, 
+  reduceNumberPreserveMaster,
+  subtractWithRules, 
+  calculateExcessAndMissing 
+} from './numerologyData';
+
+// Paleta de colores inspirada en tu imagen
+const colors = {
+  turquoise: "#7DD1C8",
+  gold: "#F0C987",
+  goldDark: "#E2B15B",
+  red: "#FF6B6B",
+  blue: "#4D96FF",
+  white: "#FFFFFF",
+  black: "#333333",
+  gray: "#CCCCCC",
+  grayLight: "#EEEEEE",
+  purple: "#BA68C8",
+  brown: "#964B00"
+};
+
+// Mapeo de números ideales para la tabla
+const idealNumberMapping = {
+  purposeNumber: 1,
+  lifePathNumber: 2,
+  talentNumber: 3,
+  mentalNumber: 4,
+  emotionalNumber: 5,
+  personalityNumber: 6,
+  feminineNumber: 7,
+  masculineNumber: 8,
+  challengeNumber: 9
+};
+
+const App = () => {
+  // Estados para la fecha de nacimiento
+  const [day, setDay] = useState('');
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('');
+  
+  // Estados para los resultados y visualización
+  const [numberResults, setNumberResults] = useState(null);
+  const [selectedNumber, setSelectedNumber] = useState(null);
+  const [selectedNumberType, setSelectedNumberType] = useState(null);
+  const [calculated, setCalculated] = useState(false);
+  
+  // Estados para herramienta de dibujo
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [drawingTool, setDrawingTool] = useState('pen');
+  const [currentColor, setCurrentColor] = useState(colors.black);
+  const [brushSize, setBrushSize] = useState(3);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  
+  // Referencias para el canvas
+  const canvasRef = useRef(null);
+  const canvasContainerRef = useRef(null);
+  const ctxRef = useRef(null);
+
+  // Inicializar canvas y contexto
+  useEffect(() => {
+    if (canvasRef.current) {
+      const canvas = canvasRef.current;
+      // Configurar el canvas para responder correctamente a diferentes dispositivos
+      canvas.width = canvasContainerRef.current.offsetWidth;
+      canvas.height = canvasContainerRef.current.offsetHeight || 500;
+      
+      // Configurar el contexto para dibujar
+      const ctx = canvas.getContext('2d');
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = currentColor;
+      ctx.lineWidth = brushSize;
+      ctxRef.current = ctx;
+    }
+  }, [numberResults, currentColor, brushSize]);
+
+  // Cálculos numerológicos
+  const handleCalculate = () => {
+    if (!day || !month || !year) {
+      alert('Por favor, ingresa una fecha de nacimiento completa');
+      return;
+    }
+
+    // Calcular la edad
+    const birthDate = new Date(year, month - 1, day);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    // Calcular números numerológicos básicos
+    const dayNum = reduceNumber(parseInt(day));
+    const monthNum = reduceNumber(parseInt(month));
+    const yearNum = reduceNumber(parseInt(year));
+    
+    // Cálculos según las nuevas fórmulas
+    const personalNum = reduceNumberPreserveMaster(dayNum);
+    const feminineNum = reduceNumberPreserveMaster(monthNum);
+    const masculineNum = reduceNumberPreserveMaster(yearNum);
+    const mentalNum = reduceNumberPreserveMaster(personalNum + masculineNum);
+    const emotionalNum = reduceNumberPreserveMaster(personalNum + feminineNum);
+    const talentNum = reduceNumberPreserveMaster(mentalNum + emotionalNum);
+    const workNum = subtractWithRules(personalNum, feminineNum);
+    const energeticNum = subtractWithRules(personalNum, masculineNum);
+    const challengeNum = subtractWithRules(workNum, energeticNum);
+    const lifePathNum = reduceNumberPreserveMaster(dayNum + monthNum + yearNum);
+    const purposeNum = reduceNumberPreserveMaster(personalNum + lifePathNum);
+
+    // Crear objeto con todos los resultados
+    const results = {
+      age: age,
+      dayNumber: dayNum,
+      monthNumber: monthNum,
+      yearNumber: yearNum,
+      lifePathNumber: lifePathNum,
+      personalityNumber: personalNum,
+      mentalNumber: mentalNum,
+      emotionalNumber: emotionalNum,
+      purposeNumber: purposeNum,
+      talentNumber: talentNum,
+      masculineNumber: masculineNum,
+      feminineNumber: feminineNum,
+      workFamilyNumber: workNum,
+      energeticNumber: energeticNum,
+      challengeNumber: challengeNum,
+      // Otros resultados...
+    };
+
+    setNumberResults(results);
+    setCalculated(true);
+    
+    // Seleccionar el número de camino de vida por defecto
+    setSelectedNumber(lifePathNum);
+    setSelectedNumberType('lifePathNumber');
+    
+    // Limpiar canvas después de un nuevo cálculo
+    if (ctxRef.current) {
+      ctxRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    }
+  };
+
+  // Función para verificar si un número es un número maestro
+  const isMasterNumber = (num) => {
+    return num === 11 || num === 22 || num === 33 || num === 44;
+  };
+
+  // Función para obtener todos los números maestros en el perfil
+  const getMasterNumbersInProfile = () => {
+    const results = [];
+    const allNumbers = [
+      { type: 'Propósito', value: numberResults.purposeNumber },
+      { type: 'Mental', value: numberResults.mentalNumber },
+      { type: 'Emocional', value: numberResults.emotionalNumber },
+      { type: 'Trabajo', value: numberResults.workFamilyNumber },
+      { type: 'Energético', value: numberResults.energeticNumber },
+      { type: 'Masculino', value: numberResults.masculineNumber },
+      { type: 'Femenino', value: numberResults.feminineNumber },
+      { type: 'Personal', value: numberResults.personalityNumber },
+      { type: 'Camino de Vida', value: numberResults.lifePathNumber },
+      { type: 'Talento', value: numberResults.talentNumber },
+      { type: 'Reto', value: numberResults.challengeNumber }
+    ];
+    
+    allNumbers.forEach(num => {
+      if (isMasterNumber(num.value)) {
+        results.push(num);
+      }
+    });
+    
+    return results;
+  };
+
+  // Función para renderizar un valor numérico con clase especial si es número maestro
+  const renderNumberValue = (num, type) => {
+    if (num === undefined || num === null) return <span className="result-value">-</span>;
+    
+    let className = "result-value";
+    
+    if (isMasterNumber(num)) {
+      className += " master-number";
+    } else if (type === 'workFamilyNumber' && num === 0) {
+      className += " zero-value";
+    }
+    
+    return (
+      <span 
+        className={className} 
+        onClick={() => handleNumberSelect(num, type)}
+      >
+        {num}
+      </span>
+    );
+  };
+
+  // Función para renderizar un valor numérico en el universo numérico (siempre reducido a una cifra)
+  const renderUniverseNumber = (num) => {
+    // Para el universo numérico, siempre reducimos a una cifra
+    if (num === undefined || num === null) return '';
+    try {
+      const reducedNum = reduceNumber(num);
+      return reducedNum;
+    } catch (error) {
+      console.error("Error al reducir número:", error, "Número:", num);
+      return '';
+    }
+  };
+
+  // Renderizado condicional de la información del número seleccionado
+  const renderNumberInfo = () => {
+    if (!selectedNumber && selectedNumber !== 0) return null;
+    
+    const info = numerologyInfo[selectedNumber];
+    if (!info) return <p>No hay información disponible para este número.</p>;
+    
+    return (
+      <div className="number-info">
+        <h3>{getNumberTypeName(selectedNumberType)}: {selectedNumber}</h3>
+        
+        {info.centro && (
+          <div className="info-section">
+            <h4>Centro</h4>
+            <p>{info.centro}</p>
+          </div>
+        )}
+        
+        {info.reto && (
+          <div className="info-section">
+            <h4>Reto</h4>
+            <p>{info.reto}</p>
+          </div>
+        )}
+        
+        {info.arquetipo && (
+          <div className="info-section">
+            <h4>Arquetipo</h4>
+            <p>{info.arquetipo}</p>
+          </div>
+        )}
+        
+        {info.energia && (
+          <div className="info-section">
+            <h4>Energía</h4>
+            <p>{info.energia}</p>
+          </div>
+        )}
+        
+        {info.aprendizaje && (
+          <div className="info-section">
+            <h4>Aprendizaje</h4>
+            <p>{info.aprendizaje}</p>
+          </div>
+        )}
+        
+        {info.edad && (
+          <div className="info-section">
+            <h4>Edad</h4>
+            <p>{info.edad}</p>
+          </div>
+        )}
+        
+        {info.talentos && (
+          <div className="info-section">
+            <h4>Talentos</h4>
+            <p>{info.talentos}</p>
+          </div>
+        )}
+        
+        {info.caminoDeVida && (
+          <div className="info-section">
+            <h4>Camino de Vida</h4>
+            <p>{info.caminoDeVida}</p>
+          </div>
+        )}
+        
+        {info.proposito && (
+          <div className="info-section">
+            <h4>Propósito</h4>
+            <p>{info.proposito}</p>
+          </div>
+        )}
+        
+        {info.mental && (
+          <div className="info-section">
+            <h4>Mental</h4>
+            <p>{info.mental}</p>
+          </div>
+        )}
+        
+        {info.emocionalRelaciones && (
+          <div className="info-section">
+            <h4>Emocional/Relaciones</h4>
+            <p>{info.emocionalRelaciones}</p>
+          </div>
+        )}
+        
+        {info.trabajo && (
+          <div className="info-section">
+            <h4>Trabajo</h4>
+            <p>{info.trabajo}</p>
+          </div>
+        )}
+        
+        {info.familia && (
+          <div className="info-section">
+            <h4>Familia</h4>
+            <p>{info.familia}</p>
+          </div>
+        )}
+        
+        {info.territorio && (
+          <div className="info-section">
+            <h4>Territorio</h4>
+            <p>{info.territorio}</p>
+          </div>
+        )}
+        
+        {info.energetico && (
+          <div className="info-section">
+            <h4>Energético</h4>
+            <p>{info.energetico}</p>
+          </div>
+        )}
+        
+        {info.creativo && (
+          <div className="info-section">
+            <h4>Creativo</h4>
+            <p>{info.creativo}</p>
+          </div>
+        )}
+        
+        {info.sexual && (
+          <div className="info-section">
+            <h4>Sexual</h4>
+            <p>{info.sexual}</p>
+          </div>
+        )}
+        
+        {info.conclusion && (
+          <div className="info-section">
+            <h4>Conclusión</h4>
+            <p>{info.conclusion}</p>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // Funciones para el dibujo
+  const startDrawing = ({ nativeEvent }) => {
+    const { offsetX, offsetY } = nativeEvent;
+    ctxRef.current.beginPath();
+    ctxRef.current.moveTo(offsetX, offsetY);
+    setIsDrawing(true);
+  };
+
+  const draw = ({ nativeEvent }) => {
+    if (!isDrawing) return;
+    
+    const { offsetX, offsetY } = nativeEvent;
+    
+    if (drawingTool === 'pen') {
+      ctxRef.current.lineTo(offsetX, offsetY);
+      ctxRef.current.stroke();
+    } else if (drawingTool === 'eraser') {
+      // Configurar borrador
+      ctxRef.current.globalCompositeOperation = 'destination-out';
+      ctxRef.current.lineTo(offsetX, offsetY);
+      ctxRef.current.stroke();
+      // Restaurar para próximo dibujo
+      ctxRef.current.globalCompositeOperation = 'source-over';
+    }
+  };
+
+  const stopDrawing = () => {
+    ctxRef.current.closePath();
+    setIsDrawing(false);
+  };
+
+  const handleClearCanvas = () => {
+    ctxRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  };
+
+  const handleResetCanvas = () => {
+    ctxRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    setIsDrawing(false);
+  };
+
+  const handleToolChange = (tool) => {
+    setDrawingTool(tool);
+    
+    if (tool === 'pen') {
+      ctxRef.current.strokeStyle = currentColor;
+      ctxRef.current.lineWidth = brushSize;
+    } else if (tool === 'eraser') {
+      ctxRef.current.strokeStyle = '#FFFFFF';
+      ctxRef.current.lineWidth = brushSize * 2;
+    }
+  };
+
+  const handleColorChange = (color) => {
+    setCurrentColor(color);
+    if (drawingTool === 'pen') {
+      ctxRef.current.strokeStyle = color;
+    }
+  };
+
+  const handleNumberSelect = (number, type) => {
+    setSelectedNumber(number);
+    setSelectedNumberType(type);
+  };
+
+  // Obtener nombre descriptivo del tipo de número
+  const getNumberTypeName = (type) => {
+    const typeNames = {
+      dayNumber: 'Número del Día',
+      monthNumber: 'Número del Mes',
+      yearNumber: 'Número del Año',
+      lifePathNumber: 'Número del Camino de Vida',
+      destinyNumber: 'Número del Destino',
+      purposeNumber: 'Número del Propósito',
+      mentalNumber: 'Número Mental',
+      emotionalNumber: 'Número Emocional/Relaciones',
+      workFamilyNumber: 'Número Trabajo/Familia/Territorio',
+      energeticNumber: 'Número Energético/Creativo/Sexual',
+      masculineNumber: 'Número de Energía Masculina',
+      feminineNumber: 'Número de Energía Femenina',
+      personalityNumber: 'Número de Personalidad',
+      challengeNumber: 'Número de Reto',
+      talentNumber: 'Número de Talento'
+    };
+    return typeNames[type] || 'Número';
+  };
+
+  // Renderizar universo numérico
+  const renderNumericalUniverse = () => {
+    if (!numberResults) return null;
+    
+    return (
+      <div className="numerical-universe">
+        <h3 className="universe-title">Universo Numérico</h3>
+        <div className="universe-container">
+          {/* Fila 1: Propósito y Camino de Vida */}
+          <div className="universe-row">
+            <div className="universe-item">
+              <div 
+                className="number-cell diamond"
+                onClick={() => handleNumberSelect(numberResults.purposeNumber, 'purposeNumber')}
+              >
+                <span>{renderUniverseNumber(numberResults.purposeNumber)}</span>
+              </div>
+              <span className="number-label">N° de Propósito</span>
+            </div>
+            
+            <div className="universe-item">
+              <div 
+                className="number-cell"
+                onClick={() => handleNumberSelect(numberResults.lifePathNumber, 'lifePathNumber')}
+              >
+                {renderUniverseNumber(numberResults.lifePathNumber)}
+              </div>
+              <span className="number-label">N° Camino de Vida</span>
+            </div>
+          </div>
+          
+          {/* Fila 2: Talento */}
+          <div className="universe-row">
+            <div className="universe-item">
+              <div 
+                className="number-cell turquoise-bg"
+                onClick={() => handleNumberSelect(numberResults.talentNumber, 'talentNumber')}
+              >
+                {renderUniverseNumber(numberResults.talentNumber)}
+              </div>
+              <span className="number-label">N° Talento</span>
+            </div>
+          </div>
+          
+          {/* Fila 3: Mental y Emocional */}
+          <div className="universe-row">
+            <div className="universe-item">
+              <div 
+                className="number-cell gold-bg"
+                onClick={() => handleNumberSelect(numberResults.emotionalNumber, 'emotionalNumber')}
+              >
+                {renderUniverseNumber(numberResults.emotionalNumber)}
+              </div>
+              <span className="number-label">N° Emocional/Relaciones</span>
+            </div>
+            
+            <div className="universe-item">
+              <div 
+                className="number-cell gold-bg"
+                onClick={() => handleNumberSelect(numberResults.mentalNumber, 'mentalNumber')}
+              >
+                {renderUniverseNumber(numberResults.mentalNumber)}
+              </div>
+              <span className="number-label">N° Mental</span>
+            </div>
+          </div>
+          
+          {/* Fila 4: Energía Femenina, Personal y Masculina */}
+          <div className="universe-row">
+            <div className="universe-item">
+              <div 
+                className="number-cell turquoise-bg"
+                onClick={() => handleNumberSelect(numberResults.feminineNumber, 'feminineNumber')}
+              >
+                {renderUniverseNumber(numberResults.feminineNumber)}
+              </div>
+              <span className="number-label">N° Energía Femenina</span>
+            </div>
+            
+            <div className="universe-item">
+              <div 
+                className="number-cell turquoise-bg"
+                onClick={() => handleNumberSelect(numberResults.personalityNumber, 'personalityNumber')}
+              >
+                {renderUniverseNumber(numberResults.personalityNumber)}
+              </div>
+              <span className="number-label">N° Personal</span>
+            </div>
+            
+            <div className="universe-item">
+              <div 
+                className="number-cell turquoise-bg"
+                onClick={() => handleNumberSelect(numberResults.masculineNumber, 'masculineNumber')}
+              >
+                {renderUniverseNumber(numberResults.masculineNumber)}
+              </div>
+              <span className="number-label">N° Energía Masculina</span>
+            </div>
+          </div>
+          
+          {/* Fila 5: Trabajo y Energético */}
+          <div className="universe-row">
+            <div className="universe-item">
+              <div 
+                className="number-cell gold-bg"
+                onClick={() => handleNumberSelect(numberResults.workFamilyNumber, 'workFamilyNumber')}
+              >
+                {renderUniverseNumber(numberResults.workFamilyNumber)}
+              </div>
+              <span className="number-label">N° Trabajo/Familia/Territorio</span>
+            </div>
+            
+            <div className="universe-item">
+              <div 
+                className="number-cell gold-bg"
+                onClick={() => handleNumberSelect(numberResults.energeticNumber, 'energeticNumber')}
+              >
+                {renderUniverseNumber(numberResults.energeticNumber)}
+              </div>
+              <span className="number-label">N° Energético/Creativo/Sexual</span>
+            </div>
+          </div>
+          
+          {/* Fila 6: Alma */}
+          <div className="universe-row">
+            <div className="universe-item">
+              <div 
+                className="number-cell turquoise-bg"
+                onClick={() => handleNumberSelect(numberResults.challengeNumber, 'challengeNumber')}
+              >
+                {renderUniverseNumber(numberResults.challengeNumber)}
+              </div>
+              <span className="number-label">N° Reto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Renderizar tabla ideal
+  const renderIdealTable = () => {
+    if (!numberResults || !numberResults.idealTable) return null;
+    
+    // Extraer datos para la tabla
+    const idealNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const excessNumbers = idealNumbers.map(num => {
+      const key = Object.keys(idealNumberMapping).find(k => idealNumberMapping[k] === num);
+      return numberResults.idealTable[key]?.excess || 0;
+    });
+    const realNumbers = idealNumbers.map(num => {
+      const key = Object.keys(idealNumberMapping).find(k => idealNumberMapping[k] === num);
+      return numberResults.idealTable[key]?.real || 0;
+    });
+    const missingNumbers = idealNumbers.map(num => {
+      const key = Object.keys(idealNumberMapping).find(k => idealNumberMapping[k] === num);
+      return numberResults.idealTable[key]?.missing || 0;
+    });
+    
+    return (
+      <div className="ideal-table">
+        <h3>Tabla Ideal Numérica</h3>
+        <div className="ideal-table-grid">
+          <div className="table-row">
+            <div className="table-label">Ideal:</div>
+            {idealNumbers.map(num => (
+              <div key={`ideal-${num}`} className="ideal-number">{num}</div>
+            ))}
+          </div>
+          
+          <div className="table-row">
+            <div className="table-label">Exceso:</div>
+            {excessNumbers.map((num, index) => (
+              <div key={`excess-${index}`} className="excess-number">{num}</div>
+            ))}
+          </div>
+          
+          <div className="table-row">
+            <div className="table-label">Real:</div>
+            {realNumbers.map((num, index) => (
+              <div 
+                key={`real-${index}`} 
+                className="real-number clickable"
+                onClick={() => {
+                  const key = Object.keys(idealNumberMapping).find(k => idealNumberMapping[k] === idealNumbers[index]);
+                  handleNumberSelect(num, key);
+                }}
+              >
+                {renderNumberValue(num, idealNumbers[index] === 6 ? 'workFamilyNumber' : '')}
+              </div>
+            ))}
+          </div>
+          
+          <div className="table-row">
+            <div className="table-label">Falta:</div>
+            {missingNumbers.map((num, index) => (
+              <div key={`missing-${index}`} className="missing-number">{num}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+  // Renderizar tabla de años
+  const renderYearsTable = () => {
+    if (!numberResults || !numberResults.years) return null;
+    
+    return (
+      <div className="years-table">
+        <h3>Tabla de Años</h3>
+        <div className="years-table-grid">
+          <div className="table-header">Año</div>
+          <div className="table-header">Edad</div>
+          <div className="table-header">Año General</div>
+          <div className="table-header">Año Personal</div>
+          <div className="table-header">Año Vital</div>
+          
+          {Object.entries(numberResults.years).map(([period, data]) => {
+            const age = period === 'previous' 
+              ? numberResults.age - 1 
+              : period === 'current' 
+                ? numberResults.age 
+                : numberResults.age + 1;
+            
+            return (
+              <React.Fragment key={period}>
+                <div className="table-cell">
+                  {period === 'previous' ? 'Anterior' : period === 'current' ? 'Actual' : 'Siguiente'}
+                  <br />({data.year})
+                </div>
+                <div className="table-cell">{age}</div>
+                <div 
+                  className="table-cell clickable"
+                  onClick={() => handleNumberSelect(data.generalYear, 'generalYear')}
+                >
+                  {renderNumberValue(data.generalYear, '')}
+                </div>
+                <div 
+                  className="table-cell clickable"
+                  onClick={() => handleNumberSelect(data.personalYear, 'personalYear')}
+                >
+                  {renderNumberValue(data.personalYear, '')}
+                </div>
+                <div 
+                  className="table-cell clickable"
+                  onClick={() => handleNumberSelect(data.vitalYear, 'vitalYear')}
+                >
+                  {renderNumberValue(data.vitalYear, '')}
+                </div>
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+  
+  // Renderizar tabla de etapas vitales
+  const renderLifeStagesTable = () => {
+    if (!numberResults || !numberResults.lifeStages) return null;
+    
+    return (
+      <div className="life-stages-table">
+        <h3>Etapas Vitales</h3>
+        <div className="life-stages-table-grid">
+          <div className="table-header">Etapa</div>
+          <div className="table-header">Edad</div>
+          <div className="table-header">Oportunidades</div>
+          <div className="table-header">Retos</div>
+          
+          {Object.entries(numberResults.lifeStages).map(([stage, data], index) => {
+            const stageNumber = parseInt(stage.replace('stage', ''));
+            const previousStage = stageNumber > 1 ? `stage${stageNumber - 1}` : null;
+            const startAge = previousStage ? numberResults.lifeStages[previousStage].endAge + 1 : 0;
+            
+            return (
+              <React.Fragment key={stage}>
+                <div className="table-cell">Etapa {stageNumber}</div>
+                <div className="table-cell">{startAge} - {data.endAge}</div>
+                <div 
+                  className="table-cell clickable"
+                  onClick={() => handleNumberSelect(data.opportunities, 'opportunities')}
+                >
+                  {renderNumberValue(data.opportunities, '')}
+                </div>
+                <div 
+                  className="table-cell clickable"
+                  onClick={() => handleNumberSelect(data.challenges, 'challenges')}
+                >
+                  {renderNumberValue(data.challenges, '')}
+                </div>
+              </React.Fragment>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="app">
+      <header className="header">
+        <h1>
+          <Calculator size={24} />
+          Calculadora de Numerología
+        </h1>
+      </header>
+      
+      <div className="calculator-container">
+        <section className="input-section">
+          <h2>Ingresa tu fecha de nacimiento</h2>
+          <div className="date-input">
+            <input
+              type="number"
+              placeholder="Día (1-31)"
+              min="1"
+              max="31"
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Mes (1-12)"
+              min="1"
+              max="12"
+              value={month}
+              onChange={(e) => setMonth(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Año (ej. 1980)"
+              min="1"
+              max="9999"
+              value={year}
+              onChange={(e) => setYear(e.target.value)}
+            />
+          </div>
+          <button className="calculate-btn" onClick={handleCalculate}>
+            Calcular
+          </button>
+          
+          {numberResults && (
+            <div className="detailed-results">
+              <div className="master-numbers-section">
+                <h4>Números Maestros en tu Perfil:</h4>
+                <div className="master-numbers-list">
+                  {getMasterNumbersInProfile().length > 0 ? (
+                    getMasterNumbersInProfile().map((num, index) => (
+                      <div key={index} className="master-number-item">
+                        <span className="master-number-type">{num.type}:</span>
+                        <span 
+                          className="result-value master-number" 
+                          onClick={() => handleNumberSelect(num.value, '')}
+                        >
+                          {num.value}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No tienes números maestros en tu perfil numerológico.</p>
+                  )}
+                </div>
+                {numberResults.workFamilyNumber === 0 && (
+                  <div className="special-number-note">
+                    <p>
+                      <span className="result-value zero-value">0</span> en Trabajo/Familia/Territorio: 
+                      Este número tiene un significado especial en tu interpretación numerológica.
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div className="result-item">
+                <span className="result-label">Edad:</span>
+                <span className="result-value">{numberResults.age}</span>
+              </div>
+              <div className="result-item">
+                <span className="result-label">N° Propósito:</span>
+                {renderNumberValue(numberResults.purposeNumber, '')}
+              </div>
+              <div className="result-item">
+                <span className="result-label">N° Mental:</span>
+                {renderNumberValue(numberResults.mentalNumber, '')}
+              </div>
+              <div className="result-item">
+                <span className="result-label">N° Emocional Relaciones:</span>
+                {renderNumberValue(numberResults.emotionalNumber, '')}
+              </div>
+              <div className="result-item">
+                <span className="result-label">N° Trabajo Familia Territorio:</span>
+                {renderNumberValue(numberResults.workFamilyNumber, 'workFamilyNumber')}
+              </div>
+              <div className="result-item">
+                <span className="result-label">N° Energético Creativo Sexual:</span>
+                {renderNumberValue(numberResults.energeticNumber, '')}
+              </div>
+              <div className="result-item">
+                <span className="result-label">N° Energía Masculina:</span>
+                {renderNumberValue(numberResults.masculineNumber, '')}
+              </div>
+              <div className="result-item">
+                <span className="result-label">N° Energía Femenina:</span>
+                {renderNumberValue(numberResults.feminineNumber, '')}
+              </div>
+              <div className="result-item">
+                <span className="result-label">N° Personalidad:</span>
+                {renderNumberValue(numberResults.personalityNumber, '')}
+              </div>
+              <div className="result-item">
+                <span className="result-label">N° Camino de Vida:</span>
+                {renderNumberValue(numberResults.lifePathNumber, '')}
+              </div>
+            </div>
+          )}
+        </section>
+        
+        {calculated && (
+          <section className="results-section">
+            <div className="additional-sections">
+              {renderNumericalUniverse()}
+              {renderIdealTable()}
+              {renderYearsTable()}
+              {renderLifeStagesTable()}
+            </div>
+            
+            <div className="info-and-drawing-container">
+              <div className="info-container">
+                {renderNumberInfo()}
+              </div>
+              
+              <div className="drawing-container">
+                <div className="drawing-tools">
+                  <button 
+                    className="tool-btn" 
+                    onClick={() => setIsDrawing(true)}
+                    title="Dibujar"
+                  >
+                    <PenLine size={20} />
+                  </button>
+                  <button 
+                    className="tool-btn" 
+                    onClick={handleClearCanvas}
+                    title="Borrar todo"
+                  >
+                    <Eraser size={20} />
+                  </button>
+                  <button 
+                    className="tool-btn" 
+                    onClick={handleResetCanvas}
+                    title="Reiniciar"
+                  >
+                    <RotateCcw size={20} />
+                  </button>
+                  <button 
+                    className="tool-btn" 
+                    onClick={() => setShowColorPicker(!showColorPicker)}
+                    title="Cambiar color"
+                  >
+                    <Palette size={20} />
+                  </button>
+                  
+                  {showColorPicker && (
+                    <div className="color-picker">
+                      <div 
+                        className="color-option" 
+                        style={{ backgroundColor: colors.black }}
+                        onClick={() => handleColorChange(colors.black)}
+                      ></div>
+                      <div 
+                        className="color-option" 
+                        style={{ backgroundColor: colors.turquoise }}
+                        onClick={() => handleColorChange(colors.turquoise)}
+                      ></div>
+                      <div 
+                        className="color-option" 
+                        style={{ backgroundColor: colors.gold }}
+                        onClick={() => handleColorChange(colors.gold)}
+                      ></div>
+                      <div 
+                        className="color-option" 
+                        style={{ backgroundColor: colors.red }}
+                        onClick={() => handleColorChange(colors.red)}
+                      ></div>
+                      <div 
+                        className="color-option" 
+                        style={{ backgroundColor: colors.blue }}
+                        onClick={() => handleColorChange(colors.blue)}
+                      ></div>
+                      <div 
+                        className="color-option" 
+                        style={{ backgroundColor: colors.purple }}
+                        onClick={() => handleColorChange(colors.purple)}
+                      ></div>
+                    </div>
+                  )}
+                  
+                  <div className="brush-size-container">
+                    <input 
+                      type="range" 
+                      min="1" 
+                      max="20" 
+                      value={brushSize} 
+                      onChange={(e) => setBrushSize(parseInt(e.target.value))}
+                      className="brush-size-slider"
+                    />
+                  </div>
+                </div>
+                
+                <div 
+                  className="canvas-container"
+                  ref={canvasContainerRef}
+                  style={{ height: '500px' }}
+                >
+                  <canvas
+                    ref={canvasRef}
+                    className="drawing-canvas"
+                    onMouseDown={startDrawing}
+                    onMouseUp={stopDrawing}
+                    onMouseMove={draw}
+                    onMouseLeave={stopDrawing}
+                  ></canvas>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+      </div>
+      
+      <footer className="footer">
+        <p> 2024 - Calculadora de Numerología</p>
+      </footer>
+    </div>
+  );
+};
+
+export default App;

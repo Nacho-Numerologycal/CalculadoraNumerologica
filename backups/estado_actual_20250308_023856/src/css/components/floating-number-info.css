@@ -1,0 +1,92 @@
+/* Estilos para la ventana flotante de información de números */
+.floating-number-info {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: clamp(280px, 30%, 450px);
+  height: clamp(300px, 50vh, 600px);
+  background: white;
+  border: 1px solid var(--color-gray-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 1.5rem;
+  z-index: 1000;
+  overflow-y: auto;
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Animación de entrada */
+.floating-number-info.entering {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.floating-number-info .close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-dark);
+  padding: 0.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.floating-number-info .close-btn:hover {
+  background-color: var(--color-gray-light);
+}
+
+.floating-content {
+  margin-top: 0.5rem;
+}
+
+/* Estilos para el contenido de la información */
+.floating-content h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  color: var(--color-turquoise);
+  border-bottom: 2px solid var(--color-gold);
+  padding-bottom: 0.5rem;
+}
+
+.floating-content .info-section {
+  margin-bottom: 1.25rem;
+}
+
+.floating-content .info-section h4 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  color: var(--color-gold-dark);
+}
+
+.floating-content .info-section p {
+  margin: 0;
+  line-height: 1.5;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .floating-number-info {
+    width: calc(100% - 2rem);
+    height: 60vh;
+    right: 1rem;
+    left: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .floating-number-info {
+    height: 70vh;
+    bottom: 0.5rem;
+  }
+}

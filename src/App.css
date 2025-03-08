@@ -637,8 +637,8 @@ input::-webkit-inner-spin-button {
 }
 
 .number-circle {
-  width: 50px;
-  height: 50px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   background-color: var(--color-turquoise-light);
   color: white;
@@ -646,7 +646,7 @@ input::-webkit-inner-spin-button {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   cursor: pointer;
   transition: transform 0.2s;
 }
@@ -894,130 +894,140 @@ input::-webkit-inner-spin-button {
 
 /* Universo Numérico */
 .numerical-universe {
-  background-color: var(--color-white);
-  border-radius: var(--border-radius);
-  padding: 1.5rem;
-  box-shadow: var(--box-shadow);
-  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 1rem 0;
+  background-color: #fff;
+  border-radius: 8px;
 }
 
-.universe-title {
-  color: var(--color-gold-dark);
-  margin-bottom: 2rem;
+.numerical-universe h3 {
   text-align: center;
+  margin-bottom: 1.5rem;
   font-size: 1.5rem;
+  color: var(--color-gold-dark);
+  font-weight: 600;
 }
 
 .universe-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.5rem;
-  max-width: 800px;
-  margin: 0 auto;
+  gap: 1.8rem;
+  padding: 0 1rem;
 }
 
 .universe-row {
   display: flex;
-  justify-content: center;
-  gap: 8rem;
+  justify-content: space-around;
   width: 100%;
-  position: relative;
+  max-width: 600px;
+  gap: 2rem;
+}
+
+.universe-row.center-row {
+  justify-content: center;
+}
+
+.universe-row.three-items {
+  gap: 1.5rem;
 }
 
 .universe-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
-  width: 180px; /* Ancho fijo para todos los elementos */
+  text-align: center;
+  gap: 0.5rem;
 }
 
-.universe-item .number-cell {
-  width: 70px;
-  height: 70px;
-  background-color: var(--color-turquoise);
-  color: var(--color-white);
-  font-size: 1.8rem;
-  font-weight: bold;
+.number-cell {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.8rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.universe-item .number-cell:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 10px rgba(125, 209, 200, 0.5);
+.number-cell:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.universe-item .number-cell.diamond {
-  transform: rotate(45deg);
-  border-radius: 4px;
-  background-color: var(--color-gold);
+.gold-bg {
+  background-color: #c1a875;
+  color: #5c4d2e;
 }
 
-.universe-item .number-cell.diamond > span {
-  transform: rotate(-45deg);
-  display: inline-block;
+.turquoise-bg {
+  background-color: #007a87;
+  color: #ffffff;
 }
 
-.universe-item .number-cell.diamond:hover {
-  transform: rotate(45deg) scale(1.1);
-}
-
-.universe-item .number-cell.turquoise-bg {
-  background-color: var(--color-turquoise);
-}
-
-.universe-item .number-cell.gold-bg {
-  background-color: var(--color-gold);
-}
-
-.universe-item .number-label {
+.number-label {
+  font-size: 0.8rem;
+  max-width: 120px;
+  line-height: 1.2;
   text-align: center;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--color-black);
-  white-space: nowrap;
-  text-transform: capitalize;
 }
 
-/* Estilos específicos para las filas del universo numérico */
-.universe-row:nth-child(1) {
-  margin-bottom: 1rem;
+/* Media queries para asegurar consistencia en móvil */
+@media (max-width: 768px) {
+  .universe-container {
+    gap: 1.5rem;
+  }
+  
+  .universe-row {
+    gap: 1.5rem;
+  }
+  
+  .universe-row.three-items {
+    gap: 1rem;
+  }
+  
+  .number-cell {
+    width: 45px;
+    height: 45px;
+    font-size: 1.6rem;
+  }
+  
+  .number-label {
+    font-size: 0.75rem;
+    max-width: 110px;
+  }
 }
 
-.universe-row:nth-child(3) {
-  margin-top: 1rem;
-}
-
-/* Estilos específicos para las columnas del universo numérico */
-.universe-row:nth-child(3) .universe-item {
-  flex: 1;
-  max-width: 180px;
-}
-
-/* Estilos específicos para el número emocional y mental para alinearlos correctamente */
-.universe-row:nth-child(3) {
-  justify-content: space-around;
-  width: 80%;
-  margin: 0 auto;
-}
-
-/* Estilos para la fila de trabajo y energético */
-.universe-row:nth-child(5) {
-  justify-content: space-around;
-  width: 80%;
-  margin: 0 auto;
-}
-
-/* Estilos para la fila de reto */
-.universe-row:nth-child(6) {
-  margin-top: 1rem;
+@media (max-width: 576px) {
+  .universe-container {
+    gap: 1.2rem;
+    padding: 0 0.5rem;
+  }
+  
+  .universe-row {
+    gap: 1rem;
+  }
+  
+  .universe-row.three-items {
+    gap: 0.8rem;
+  }
+  
+  .number-cell {
+    width: 40px;
+    height: 40px;
+    font-size: 1.4rem;
+  }
+  
+  .number-label {
+    font-size: 0.7rem;
+    max-width: 100px;
+  }
 }
 
 /* Tabla Ideal */
@@ -1027,6 +1037,7 @@ input::-webkit-inner-spin-button {
   padding: 1.5rem;
   box-shadow: var(--box-shadow);
   margin-bottom: 2rem;
+  overflow-x: auto; /* Permitir scroll horizontal en pantallas pequeñas */
 }
 
 .ideal-table-grid {
@@ -1035,18 +1046,20 @@ input::-webkit-inner-spin-button {
   gap: 0.5rem;
   max-width: 800px;
   margin: 0 auto;
+  min-width: 900px; /* Ajustado para mantener las 9 columnas */
 }
 
 .table-row {
   display: grid;
-  grid-template-columns: 100px repeat(9, 1fr);
+  grid-template-columns: 100px repeat(9, minmax(30px, 1fr)); /* 9 columnas */
   gap: 0.5rem;
   align-items: center;
 }
 
 .table-label {
   font-weight: bold;
-  color: var(--color-black);
+  color: var(--color-turquoise);  /* Cambiar de var(--color-black) a var(--color-turquoise) */
+  font-size: 1.5rem;              /* Añadir esta línea */
   text-align: right;
   padding-right: 1rem;
 }
@@ -1055,16 +1068,15 @@ input::-webkit-inner-spin-button {
 .real-number,
 .excess-number,
 .missing-number {
-  width: 50px;
-  height: 50px;
+  width: 62px;
+  height: 62px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   font-weight: bold;
   margin: 0 auto;
-  font-size: 1.2rem;
-  position: relative;
+  font-size: 1.5rem;
 }
 
 /* Añadimos el círculo exterior para todos los números */
@@ -1074,8 +1086,8 @@ input::-webkit-inner-spin-button {
 .missing-number::before {
   content: '';
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
   background: transparent;
   border: 1px solid var(--color-gold-dark);
@@ -1137,218 +1149,29 @@ input::-webkit-inner-spin-button {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Tabla de Años */
-.years-table-container {
-  background-color: var(--color-white);
-  border-radius: var(--border-radius);
-  padding: 1.5rem;
-  box-shadow: var(--box-shadow);
-  margin-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.table-title {
-  text-align: center;
-  margin-bottom: 1rem;
-  color: var(--color-gold-dark);
-  font-size: 1.5rem;
-}
-
-.years-table-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  max-width: 600px;
-  margin: 0 auto;
-  border-collapse: collapse;
-  border: 2px solid #e0e0e0;
-  background-color: #f9f9f9;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Estilo para los encabezados de la tabla de años */
-.years-table-grid .table-header {
-  background-color: var(--color-turquoise-light);
-  color: var(--color-turquoise);
-  font-size: 1.2rem;
-  padding: 0.75rem 0.5rem;
-  text-align: center;
-  font-weight: bold;
-  border: 1px solid #e0e0e0;
-  min-width: 100px;
-  color: var(--color-turquoise);
-}
-
-/* Estilo para las celdas de la tabla de años */
-.years-table-grid .table-cell {
-  padding: 1rem 0.75rem;
-  border: 1px solid #e0e0e0;
-  background-color: var(--color-white);
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  min-width: 100px;
-  color: var(--color-turquoise);
-}
-
-/* Estilo para la primera columna (encabezados) */
-.years-table-grid .table-header:first-child,
-.years-table-grid .table-header:nth-child(5),
-.years-table-grid .table-header:nth-child(9),
-.years-table-grid .table-header:nth-child(13),
-.years-table-grid .table-header:nth-child(17) {
-  color: var(--color-turquoise);
-  background-color: var(--color-turquoise-light);
-  font-weight: bold;
-  text-align: left;
-  padding-left: 1rem;
-}
-
-/* Estilo para la edad actual */
-.years-table-grid .current-year-column[data-type="age"] {
-  color: var(--color-gold-dark);
-}
-
-/* Estilo para los años en la tabla */
-.years-table-grid .table-cell[data-type="year"] {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: var(--color-turquoise);
-}
-
-/* Estilo para el año actual */
-.years-table-grid .current-year-column[data-type="year"] {
-  color: var(--color-gold-dark);
-}
-
-/* Componentes de la fecha */
-.date-components {
-  background-color: var(--color-white);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-lg);
-  box-shadow: var(--box-shadow);
-  margin-bottom: var(--spacing-xl);
-}
-
-.date-components h3 {
-  color: var(--color-gold-dark);
-  margin-bottom: var(--spacing-lg);
-  text-align: center;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-}
-
-.components-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-}
-
-.date-component {
-  background-color: var(--color-turquoise-light);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-md);
-  text-align: center;
-}
-
-.component-label {
-  font-size: var(--font-size-sm);
-  color: var(--color-gray-dark);
-  margin-bottom: var(--spacing-xs);
-}
-
-.component-value {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-turquoise);
-}
-
-.component-value.master {
-  color: var(--color-gold-dark);
-}
-
-.total-sum {
-  background-color: var(--color-gold-light);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-md);
-  text-align: center;
-  margin-top: var(--spacing-md);
-}
-
-.total-sum .component-value {
-  color: var(--color-gold-dark);
-}
-
-/* Pie de página */
-.footer {
-  background-color: var(--color-turquoise);
-  color: var(--color-white);
-  padding: var(--spacing-lg);
-  text-align: center;
-  margin-top: auto;
-  border-radius: var(--border-radius);
-}
-
-.footer p {
-  font-size: var(--font-size-sm);
-  opacity: 0.9;
-}
-
-/* Responsive */
+/* Estilos específicos para móvil */
 @media (max-width: 768px) {
-  .app {
-    padding: var(--spacing-sm);
+  .ideal-table {
+    padding: 1rem 0.5rem;
   }
   
-  .header h1 {
-    font-size: var(--font-size-xl);
+  .ideal-table-grid {
+    min-width: 550px; /* Ajustado para móvil */
   }
   
-  .date-inputs {
-    flex-direction: column;
-    gap: 1rem;
+  .table-row {
+    grid-template-columns: 80px repeat(3, minmax(30px, 1fr));
+    gap: 0.25rem;
   }
   
-  .date-inputs input {
-    width: 100%;
-    max-width: 200px;
-    margin: 0 auto;
+  .table-label {
+    font-size: 1.2rem;
   }
   
-  .calendar-picker {
-    margin: 0 auto;
-  }
-  
-  .calendar-button {
-    width: 100%;
-    max-width: 200px;
-  }
-  
-  .number-universe {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .number-grid {
-    gap: 1rem;
-  }
-  
-  .number-cell {
-    width: 50px;
-    height: 50px;
-    font-size: var(--font-size-lg);
-  }
-  
-  .horizontal-number {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .stage-circle, .opportunity-circle, .challenge-circle {
-    width: 35px;
-    height: 35px;
-    font-size: var(--font-size-sm);
+  .ideal-table-number {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
   }
 }
 
@@ -1453,12 +1276,19 @@ input::-webkit-inner-spin-button {
   border-radius: 8px;
   padding: 10px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .date-component-label {
   font-size: 14px;
   color: #8b5a2b;
   margin-bottom: 5px;
+  min-height: 2.5em; /* Altura mínima para acomodar dos líneas de texto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .date-component-value {
@@ -1504,19 +1334,21 @@ input::-webkit-inner-spin-button {
 }
 
 .formula {
-  font-size: 16px;
-  color: #333;
+  flex-grow: 1;
+  padding-right: 1rem;
 }
 
-.master-number {
-  font-size: 18px;
+.hidden-master-numbers .master-number {
   font-weight: bold;
-  color: #8b5a2b;
+  color: var(--color-gold-dark);
+  font-size: 1.2rem;
   cursor: pointer;
+  transition: var(--transition);
 }
 
-.master-number:hover {
-  text-decoration: underline;
+.hidden-master-numbers .master-number:hover {
+  color: var(--color-gold);
+  transform: scale(1.1);
 }
 
 /* Estilos para la tabla de etapas vitales con el nuevo diseño */
@@ -1590,14 +1422,14 @@ input::-webkit-inner-spin-button {
 
 .opportunity-number,
 .challenge-number {
-  font-size: 2rem;
+  font-size: 1.6rem;  /* Reducir de 2rem a 1.6rem */
   color: var(--color-turquoise);
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.2s;
   position: relative;
   display: inline-block;
-  z-index: 1; /* Asegura que el número esté por encima del pseudo-elemento */
+  z-index: 1;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -2093,15 +1925,16 @@ input::-webkit-inner-spin-button {
 .floating-color-picker .color-option {
   width: 45px;
   height: 45px;
-  border-radius: 50%;
+  border-radius: var(--border-radius-circle);
   cursor: pointer;
   transition: var(--transition);
-  border: 3px solid transparent;
+  border: 2px solid var(--color-white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .floating-color-picker .color-option.active {
   transform: scale(1.2);
-  border: 3px solid var(--color-white);
+  border: 2px solid var(--color-dark);
   box-shadow: var(--box-shadow-sm);
 }
 
@@ -2142,12 +1975,13 @@ input::-webkit-inner-spin-button {
   }
   
   .floating-drawing-controls {
-    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   
   .floating-drawing-controls .drawing-btn {
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
   }
   
   .floating-color-picker .color-option {
@@ -2173,8 +2007,8 @@ input::-webkit-inner-spin-button {
   left: 0;
   width: 100%;
   height: 100%;
-  cursor: crosshair;
   pointer-events: auto; /* Captura eventos en el canvas */
+  cursor: crosshair;
 }
 
 /* Controles de dibujo */
@@ -2191,6 +2025,295 @@ input::-webkit-inner-spin-button {
   box-shadow: var(--box-shadow-lg);
   pointer-events: auto; /* Captura eventos en los controles */
   z-index: 1001;
+}
+
+/* Estilos para la zona de dibujo en blanco */
+.blank-drawing-canvas {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  cursor: crosshair;
+}
+
+.blank-canvas-controls {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.8rem;
+  background-color: var(--color-white);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+  z-index: 1001;
+}
+
+.blank-canvas-controls .drawing-btn {
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1.3rem;
+}
+
+.blank-canvas-controls .drawing-btn:hover {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  transform: scale(1.1);
+}
+
+.blank-canvas-controls .drawing-btn.active {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  transform: scale(1.1);
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .blank-canvas-controls {
+    padding: 0.8rem;
+  }
+  
+  .blank-canvas-controls .drawing-btn {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .blank-canvas-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .blank-canvas-controls .drawing-btn {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* Estilos para el selector de color en la ventana de dibujo en blanco */
+.blank-canvas-color-picker {
+  position: absolute;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-white);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  z-index: 1002;
+  border: 2px solid var(--color-turquoise);
+}
+
+.blank-canvas-color-picker .color-options {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.blank-canvas-color-picker .color-option {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-circle);
+  cursor: pointer;
+  border: 2px solid var(--color-white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: var(--transition);
+}
+
+.blank-canvas-color-picker .color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.blank-canvas-color-picker .color-option.active {
+  border: 3px solid var(--color-dark);
+}
+
+/* Estilos para el selector de grosor en la ventana de dibujo en blanco */
+.blank-canvas-line-width-picker {
+  position: absolute;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-white);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  z-index: 1002;
+  border: 2px solid var(--color-turquoise);
+}
+
+.blank-canvas-line-width-picker .line-width-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition);
+}
+
+.blank-canvas-line-width-picker .line-width-option:hover {
+  background-color: var(--color-gray-light);
+}
+
+.blank-canvas-line-width-picker .line-width-option.active {
+  background-color: var(--color-turquoise-light);
+}
+
+.blank-canvas-line-width-picker .line-width-preview {
+  height: 2px;
+  background-color: var(--color-dark);
+  min-width: 50px;
+}
+
+/* Estilos para las secciones desplegables */
+.collapsible-section {
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.collapsible-header {
+  background-color: var(--color-turquoise);
+  color: white;
+  padding: 0.8rem 1.2rem;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.collapsible-header:hover {
+  background-color: #006d77;
+}
+
+.collapsible-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+}
+
+.collapsible-content {
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ajustes para mantener la apariencia original */
+.collapsible-section h3:not(.collapsible-header h3) {
+  margin-top: 0;
+}
+
+.floating-drawing-controls .drawing-btn {
+  background-color: var(--color-turquoise-light);
+  color: var(--color-turquoise);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1.3rem;
+}
+
+.laser-icon {
+  color: red;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawing-canvas-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
+}
+
+.drawing-canvas-container {
+  width: 90%;
+  height: 90%;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.drawing-canvas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+}
+
+.drawing-canvas-header h3 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.close-canvas-btn {
+  background: none;
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.close-canvas-btn:hover {
+  transform: scale(1.1);
+}
+
+.drawing-canvas-content {
+  flex: 1;
+  background-color: var(--color-white);
+  position: relative;
 }
 
 /* Estilos para la herramienta de dibujo */
@@ -2284,22 +2407,6 @@ input::-webkit-inner-spin-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.5;
-    transform: scale(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-  100% {
-    opacity: 0.5;
-    transform: scale(0.8);
-  }
 }
 
 /* Estilos para la sección desplegable de números maestros ocultos */
@@ -2349,7 +2456,7 @@ input::-webkit-inner-spin-button {
   padding-bottom: 0;
 }
 
-.hidden-master-numbers .formula {
+.formula {
   flex-grow: 1;
   padding-right: 1rem;
 }
@@ -2369,7 +2476,7 @@ input::-webkit-inner-spin-button {
 
 /* Estilo para los números en la tabla */
 .years-table-grid .table-cell[data-type="number"] {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
   color: var(--color-turquoise);
 }
@@ -2380,7 +2487,7 @@ input::-webkit-inner-spin-button {
 }
 
 .years-table-grid .table-cell .result-value {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
   color: var(--color-turquoise);
 }
@@ -2436,68 +2543,117 @@ input::-webkit-inner-spin-button {
   background-color: #fff;
 }
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background-color: var(--gold-color);
-  color: #fff;
+.collapsible-header {
+  background-color: var(--color-turquoise);
+  color: white;
+  padding: 0.8rem 1.2rem;
+  transition: background-color 0.3s ease;
   cursor: pointer;
-  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.section-header h3 {
+.collapsible-header:hover {
+  background-color: #006d77;
+}
+
+.collapsible-header h3 {
   margin: 0;
   font-size: 1.2rem;
   font-weight: 600;
+  color: white;
 }
 
-.toggle-icon {
-  transition: transform 0.3s ease;
+.collapsible-content {
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
 }
 
-.collapsible-section.closed .toggle-icon {
-  transform: rotate(180deg);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.section-content {
-  max-height: 2000px;
-  transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
-  opacity: 1;
-  overflow: hidden;
+/* Ajustes para mantener la apariencia original */
+.collapsible-section h3:not(.collapsible-header h3) {
+  margin-top: 0;
 }
 
-.section-content.hidden {
-  max-height: 0;
-  opacity: 0;
-  transition: max-height 0.3s ease-in-out, opacity 0.2s ease-in-out;
+.years-table-grid .table-cell[data-type="year"],
+.years-table-grid .table-cell[data-type="age"] {
+  font-weight: bold;
 }
 
-/* Ajustes para tablas dentro de secciones plegables */
-.collapsible-section .ideal-table,
-.collapsible-section .life-stages-table,
-.collapsible-section .years-table-container,
-.collapsible-section .numerical-universe {
+/* Estilo específico para la etiqueta "Suma Total:" */
+.suma-total-label {
+  font-size: 13px; /* Tamaño de fuente ligeramente más pequeño */
+  line-height: 1.2;
+  padding: 0 2px;
+}
+
+.date-component-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--color-turquoise);
+  margin-bottom: 5px;
+}
+
+.date-component-value.master-number {
+  color: var(--color-gold);
+  cursor: pointer;
+}
+
+.date-component-value.master-number:hover {
+  text-decoration: underline;
+}
+
+.hidden-master-numbers {
+  background-color: #f9f5f0;
+  border-radius: 8px;
   padding: 15px;
 }
 
-/* Ajustes para la tabla de energía anual */
-.collapsible-section .years-table-grid .table-cell {
-  font-size: 1.8rem;
+.hidden-master-numbers h4 {
+  text-align: center;
+  color: #8b5a2b;
+  margin-bottom: 15px;
+}
+
+.hidden-master-formula {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #e0d5c1;
+}
+
+.hidden-master-formula:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.formula {
+  flex-grow: 1;
+  padding-right: 1rem;
+}
+
+.hidden-master-numbers .master-number {
   font-weight: bold;
-  color: var(--turquoise-color);
-}
-
-.collapsible-section .years-table-grid .current-year-column {
-  background-color: rgba(255, 215, 0, 0.2);
-  color: var(--gold-color);
-}
-
-/* Ajustes para oportunidades y retos en etapas vitales */
-.collapsible-section .opportunity-number,
-.collapsible-section .challenge-number {
-  width: 50px;
-  height: 50px;
+  color: var(--color-gold-dark);
   font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.hidden-master-numbers .master-number:hover {
+  color: var(--color-gold);
+  transform: scale(1.1);
 }

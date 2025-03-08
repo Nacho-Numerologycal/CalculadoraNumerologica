@@ -1,0 +1,22 @@
+/* header.css */
+
+.header {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  text-align: center;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: var(--spacing-xl);
+}
+
+.header h1 {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+}
+
+.header p {
+  font-size: var(--font-size-md);
+  opacity: 0.9;
+}

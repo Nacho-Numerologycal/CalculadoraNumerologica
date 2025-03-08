@@ -1,0 +1,407 @@
+/* drawing-tool.css - styles for the drawing tool component */
+
+.drawing-container {
+  position: relative;
+  margin-top: var(--spacing-lg);
+}
+
+.canvas-container {
+  position: relative;
+  border: 2px solid var(--color-turquoise);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+  background-color: var(--color-white);
+}
+
+.drawing-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  justify-content: center;
+}
+
+.drawing-tool-btn {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawing-tool-btn:hover {
+  background-color: var(--color-turquoise-lighter);
+  border-color: var(--color-turquoise);
+}
+
+.drawing-tool-btn.active {
+  background-color: var(--color-turquoise-light);
+  border-color: var(--color-turquoise);
+  color: var(--color-turquoise);
+}
+
+.color-picker-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+  justify-content: center;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--border-radius-circle);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  border: 2px solid transparent;
+}
+
+.color-option:hover, 
+.color-option.active {
+  transform: scale(1.2);
+  border-color: var(--color-gray-dark);
+}
+
+.floating-color-picker {
+  position: fixed;
+  top: 7rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: var(--spacing-md);
+  z-index: 1000;
+}
+
+.blank-canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.blank-canvas-content {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  height: 80vh;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.blank-canvas-header {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-canvas-btn {
+  background: none;
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+}
+
+/* Asegurarse de que los controles de dibujo sean visibles en la ventana de dibujo en blanco */
+.blank-canvas-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background-color: var(--color-turquoise-lighter);
+  justify-content: center;
+}
+
+.drawing-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid var(--secondary-color);
+  border-radius: 8px;
+}
+
+.drawing-canvas {
+  border: 1px solid var(--secondary-color);
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+  background-color: #fff;
+}
+
+.drawing-controls {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media (max-width: 576px) {
+  .drawing-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Estilos para los controles flotantes de dibujo */
+.floating-drawing-tool {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.floating-canvas {
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+}
+
+.floating-draw-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--color-turquoise);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.floating-draw-button:hover {
+  transform: scale(1.1);
+  background-color: var(--color-turquoise-dark, #035a73);
+}
+
+.floating-drawing-controls {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  background-color: white;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 1002;
+  transition: all 0.3s ease;
+}
+
+.floating-drawing-controls.in-blank-canvas {
+  top: 80px;
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  border: 2px solid var(--color-turquoise);
+}
+
+.drawing-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: white;
+  border: 1px solid var(--color-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--color-gray-dark);
+}
+
+.drawing-btn:hover {
+  background-color: var(--color-turquoise-lighter);
+  border-color: var(--color-turquoise);
+  color: var(--color-turquoise);
+  transform: translateY(-2px);
+}
+
+.drawing-btn.active {
+  background-color: var(--color-turquoise-light);
+  border-color: var(--color-turquoise);
+  color: var(--color-turquoise);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.drawing-btn.color-btn {
+  background-color: var(--color-turquoise-light);
+  border: 1px solid var(--color-turquoise);
+}
+
+.laser-icon {
+  color: red;
+  font-size: 18px;
+}
+
+.color-indicator {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px var(--color-gray);
+}
+
+.color-picker {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  z-index: 1003;
+  border: 1px solid var(--color-turquoise-light);
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.color-option:hover {
+  transform: scale(1.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.color-option.selected {
+  border-color: black;
+  transform: scale(1.1);
+}
+
+.line-width-picker {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1003;
+  border: 1px solid var(--color-turquoise-light);
+}
+
+.line-width-option {
+  width: 120px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 5px;
+  transition: all 0.2s ease;
+}
+
+.line-width-option:hover {
+  background-color: var(--color-turquoise-lighter);
+  transform: translateX(3px);
+}
+
+.line-width-option.selected {
+  background-color: var(--color-turquoise-light);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.line-width-preview {
+  width: 90px;
+  border-radius: 4px;
+}
+
+/* Estilos para la ventana de dibujo en blanco */
+.blank-canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.blank-canvas-content {
+  position: relative;
+  width: 90%;
+  max-width: 900px;
+  height: 80vh;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.blank-canvas-header {
+  background-color: var(--color-turquoise);
+  color: var(--color-white);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.close-canvas-btn {
+  background: none;
+  border: none;
+  color: var(--color-white);
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  transition: transform 0.2s ease;
+}
+
+.close-canvas-btn:hover {
+  transform: scale(1.2);
+}

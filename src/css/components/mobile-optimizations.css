@@ -1,0 +1,126 @@
+/* Optimizaciones específicas para dispositivos móviles */
+
+/* Ajustes generales para dispositivos móviles */
+@media (max-width: 768px) {
+  .app {
+    padding: 0.5rem;
+  }
+  
+  /* Ajustes para el Universo Numérico */
+  .numerical-universe {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.3rem 0;
+    margin: 0.5rem 0;
+  }
+  
+  .number-universe {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+    padding: 0.2rem;
+    width: 100%;
+  }
+  
+  /* Ajustes para la exploración de números */
+  .horizontal-numbers {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    width: 100%;
+  }
+  
+  .horizontal-number {
+    width: 40px;
+    height: 40px;
+  }
+  
+  /* Ajustes para la información de números */
+  .number-info {
+    padding: 0.8rem 0.5rem;
+  }
+  
+  .info-section {
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 576px) {
+  .app {
+    padding: 0.3rem;
+  }
+  
+  /* Ajustes para el Universo Numérico */
+  .numerical-universe {
+    padding: 0.2rem 0;
+    margin: 0.4rem 0;
+  }
+  
+  .number-universe {
+    gap: 0.4rem 0.2rem;
+    padding: 0.1rem;
+  }
+  
+  /* Ajustes para la exploración de números */
+  .horizontal-numbers {
+    gap: 0.4rem;
+    padding: 0.4rem 0;
+  }
+  
+  .horizontal-number {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+  
+  /* Ajustes para la información de números */
+  .number-info {
+    padding: 0.6rem 0.4rem;
+  }
+  
+  .info-section {
+    margin-bottom: 0.6rem;
+  }
+}
+
+/* Ajustes para dispositivos muy pequeños */
+@media (max-width: 380px) {
+  .app {
+    padding: 0.2rem;
+  }
+  
+  /* Ajustes para el Universo Numérico */
+  .numerical-universe {
+    padding: 0.15rem 0;
+    margin: 0.3rem 0;
+  }
+  
+  .number-universe {
+    gap: 0.3rem 0.1rem;
+    padding: 0.05rem;
+  }
+  
+  /* Ajustes para la exploración de números */
+  .horizontal-numbers {
+    gap: 0.3rem;
+    padding: 0.3rem 0;
+  }
+  
+  .horizontal-number {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+  
+  /* Ajustes para la información de números */
+  .number-info {
+    padding: 0.5rem 0.3rem;
+  }
+  
+  .info-section {
+    margin-bottom: 0.5rem;
+  }
+}
