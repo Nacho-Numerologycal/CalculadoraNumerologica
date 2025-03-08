@@ -1,0 +1,200 @@
+/* Correcciones para las Etapas Vitales - mantener todas las columnas en móvil */
+
+/* Contenedor principal */
+.life-stages-table {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+  overflow-x: auto; /* scroll horizontal */
+}
+
+.life-stages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem 0;
+  min-width: 700px; /* ancho mínimo para que todas las etapas sean visibles */
+}
+
+.life-stages-row {
+  display: flex;
+  align-items: center;
+}
+
+.life-stages-label {
+  color: var(--color-turquoise);
+  font-size: 1.5rem;
+  font-weight: bold;
+  width: 180px;
+  text-align: left;
+  flex-shrink: 0; /* Evita que se encoja */
+}
+
+.life-stage-item,
+.life-stage-number {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+}
+
+/* Estilos para los rangos de edad */
+.age-range {
+  font-size: 1.1rem;
+  color: var(--color-gold-dark);
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.current-age-range {
+  font-size: 1.3rem;
+  color: var(--color-turquoise);
+  font-weight: bold;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* Línea divisoria entre oportunidades y retos */
+.life-stages-divider {
+  height: 1px;
+  background-color: var(--color-turquoise-light);
+  margin: 0.5rem 0;
+  width: 100%;
+  opacity: 0.7;
+}
+
+/* Estilos específicos para los círculos según la documentación */
+.stage-circle {
+  position: relative;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2rem; /* Aumentado de 1rem a 1.2rem */
+  margin: 0 auto;
+  background-color: #f5f0e6;
+  color: var(--color-gold-dark);
+  border: 2px solid var(--color-gold-dark);
+  text-align: center;
+  line-height: 1.2;
+  padding: 0.25rem;
+}
+
+/* Círculo decorativo externo */
+.stage-circle::after {
+  content: '';
+  position: absolute;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-gold-dark);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.current-stage-circle {
+  position: relative;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.4rem; /* Aumentado de 1.2rem a 1.4rem */
+  margin: 0 auto;
+  background-color: var(--color-turquoise);
+  color: white;
+  border: 2px solid var(--color-turquoise);
+  text-align: center;
+  line-height: 1.2;
+  padding: 0.25rem;
+}
+
+/* Círculo decorativo externo para la etapa actual */
+.current-stage-circle::after {
+  content: '';
+  position: absolute;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-turquoise);
+  opacity: 0.5;
+  z-index: -1;
+}
+
+.opportunity-number,
+.challenge-number {
+  font-size: 1.8rem; /* Aumentado de 1.6rem a 1.8rem */
+  color: var(--color-turquoise);
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+  text-align: center;
+  min-width: 50px;
+}
+
+/* Efecto hover para números clickeables */
+.opportunity-number:hover,
+.challenge-number:hover {
+  transform: scale(1.1);
+  color: var(--color-gold-dark);
+}
+
+/* MEDIA QUERY MÓVIL */
+@media (max-width: 768px) {
+  .life-stages-table {
+    padding: 1rem 0.5rem;
+  }
+  
+  .life-stages-container {
+    min-width: 650px; /* Ajustado para móvil pero manteniendo todas las etapas */
+    gap: 1rem;
+  }
+  
+  .life-stages-label {
+    width: 140px;
+    font-size: 1.2rem;
+  }
+  
+  .stage-circle {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1rem; /* Aumentado de 0.9rem a 1rem */
+    padding: 0.15rem;
+  }
+  
+  .stage-circle::after {
+    width: 4rem;
+    height: 4rem;
+  }
+  
+  .current-stage-circle {
+    width: 4.5rem;
+    height: 4.5rem;
+    font-size: 1.2rem; /* Aumentado de 1.1rem a 1.2rem */
+    padding: 0.15rem;
+  }
+  
+  .current-stage-circle::after {
+    width: 5rem;
+    height: 5rem;
+  }
+  
+  .opportunity-number,
+  .challenge-number {
+    font-size: 1.4rem; /* Aumentado de 1.2rem a 1.4rem */
+    min-width: 40px;
+  }
+  
+  .life-stages-divider {
+    margin: 0.25rem 0;
+  }
+}
